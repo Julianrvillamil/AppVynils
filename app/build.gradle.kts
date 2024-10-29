@@ -51,4 +51,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Retrofit
+    //implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    //implementation 'com.google.code.gson:gson:2.8.2'
+    //implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
+    //Volley APIS REST
+    //implementation 'com.android.volley:volley:1.2.1'
+    implementation(libs.android.volley)
+    implementation(libs.picasso)
+
 }
