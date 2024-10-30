@@ -1,4 +1,4 @@
-package com.misw.appvynills.ui.home
+package com.misw.appvynills.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup

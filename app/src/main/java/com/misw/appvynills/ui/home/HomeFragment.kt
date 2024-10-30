@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.misw.appvynills.brokers.AlbumRepository
+import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.databinding.FragmentHomeBinding
+import com.misw.appvynills.ui.adapter.AlbumAdapter
+import com.misw.appvynills.viewmodel.HomeViewModel
+import com.misw.appvynills.viewmodel.ViewModelFactory
 
 class HomeFragment : Fragment() {
 

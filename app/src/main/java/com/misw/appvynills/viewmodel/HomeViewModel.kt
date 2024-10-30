@@ -1,12 +1,9 @@
-package com.misw.appvynills.ui.home
+package com.misw.appvynills.viewmodel
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.misw.appvynills.brokers.AlbumRepository
+import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.model.Album
 
 class HomeViewModel(private val albumRepository: AlbumRepository) : ViewModel() {

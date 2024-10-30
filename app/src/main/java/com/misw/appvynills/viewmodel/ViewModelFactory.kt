@@ -1,8 +1,8 @@
-package com.misw.appvynills.ui.home
+package com.misw.appvynills.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.misw.appvynills.brokers.AlbumRepository
+import com.misw.appvynills.repository.AlbumRepository
 
 class ViewModelFactory(private val albumRepository: AlbumRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
