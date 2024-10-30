@@ -1,5 +1,7 @@
 package com.misw.appvynills.model
 
+import org.json.JSONArray
+
 data class Album(
     val id: Int,
     val name: String,
@@ -8,9 +10,12 @@ data class Album(
     val description: String,
     val genre: String,
     val recordLabel: String,
-    val tracks: List<Track>,
+    val tracks: JSONArray,
+    val performers: JSONArray,
+    val comments: JSONArray
+    /*val tracks: List<Track>,
     val performers: List<Performer>,
-    val comments: List<Comment>
+    val comments: List<Comment>*/
 )
 
 data class Track(

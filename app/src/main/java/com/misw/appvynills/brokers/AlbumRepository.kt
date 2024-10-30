@@ -17,22 +17,32 @@ class AlbumRepository(private val context: Context) {
 
     fun getAlbums():LiveData<List<Album>> {
         val urlPath = "albums"
+        Log.d("AlbumRepository", "Fetching albums from: $urlPath")
         val request = VolleyBroker.getRequest(
             path = urlPath,
             responseListener = { response ->
                 try {
                     val albumList = mutableListOf<Album>()
                     val jsonArray = JSONArray(response)
+                    Log.d("AlbumRepository", "Response received: $response")
                     for (i in 0 until jsonArray.length()) {
                         val albumJson = jsonArray.getJSONObject(i)
+
                         val album = Album(
                             id = albumJson.getInt("id"),
                             name = albumJson.getString("name"),
                             genre = albumJson.getString("genre"),
-                            cover = albumJson.getString("cover")
+                            cover = albumJson.getString("cover"),
+                            releaseDate = albumJson.getString("releaseDate"),
+                            description = albumJson.getString("description"),
+                            recordLabel = albumJson.getString("recordLabel"),
+                            tracks = albumJson.getJSONArray("tracks"),
+                            performers = albumJson.getJSONArray("performers"),
+                            comments = albumJson.getJSONArray("comments")
                         )
                         albumList.add(album)
                     }
+                    Log.d("AlbumRepository", "Albums parsed successfully: $albumList")
                     albumsLiveData.postValue(albumList)
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -41,6 +51,7 @@ class AlbumRepository(private val context: Context) {
                 }
             },
             errorListener = { error: VolleyError ->
+                Log.e("AlbumRepository", "Volley Error: ${error.message}")
                 error.printStackTrace()
                 albumsLiveData.postValue(emptyList())
             }
