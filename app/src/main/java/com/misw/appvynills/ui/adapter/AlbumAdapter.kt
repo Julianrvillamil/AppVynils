@@ -8,7 +8,18 @@ import android.view.LayoutInflater
 import com.misw.appvynills.model.Album
 
 
-class AlbumAdapter(private val albums: List<Album>): RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
+class AlbumAdapter(private val albumList: List<Album>):
+    RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
+
+    inner class AlbumViewHolder(private val binding: ItemAlbumBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(album: Album) {
+            binding.albumTitle.text = album.name
+            binding.albumGenre.text = album.genre
+            Picasso.get().load(album.cover).into(binding.albumCover)
+            // Cargar imagen en cover si es necesario
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val binding = ItemAlbumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,17 +27,17 @@ class AlbumAdapter(private val albums: List<Album>): RecyclerView.Adapter<AlbumA
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        holder.bind(albums[position])
+        holder.bind(albumList[position])
     }
 
-    override fun getItemCount(): Int = albums.size
+    override fun getItemCount(): Int = albumList.size
 
-    class AlbumViewHolder(private val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
+    /*class AlbumViewHolder(private val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(album: Album) {
             binding.albumTitle.text = album.name
             binding.albumGenre.text = album.genre
             Picasso.get().load(album.cover).into(binding.albumCover)
         }
-    }
+    }*/
 
 }

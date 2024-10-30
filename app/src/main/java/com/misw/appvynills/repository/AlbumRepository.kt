@@ -17,11 +17,12 @@ class AlbumRepository(private val context: Context) {
 
     fun getAlbums():LiveData<List<Album>> {
         val urlPath = "albums"
-        Log.d("AlbumRepository", "Fetching albums from: $urlPath")
+        Log.d("AlbumRepository", "Fetching albums from urlpath: $urlPath")
         val request = VolleyBroker.getRequest(
             path = urlPath,
             responseListener = { response ->
                 try {
+                    Log.d("AlbumRepository", "Verificando response albums: $response")
                     val albumList = mutableListOf<Album>()
                     val jsonArray = JSONArray(response)
                     Log.d("AlbumRepository", "Response received: $response")

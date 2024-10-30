@@ -16,26 +16,21 @@ import com.misw.appvynills.viewmodel.ViewModelFactory
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
     // viewModels para instanciar el ViewModel de este fragmento
-    //private val homeViewModel: HomeViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels {
-        ViewModelFactory(AlbumRepository(requireContext())) // Asegúrate de usar la fábrica correctamente
+        ViewModelFactory(AlbumRepository(requireContext()))
+        //ViewModelFactory(requireContext())
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //val homeViewModel =
-            //ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -49,12 +44,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configuración del RecyclerView
-        binding.albumRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Configuración del RecyclerView - fragment_home.xml
+        binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(requireContext())
 
         // Observar los álbumes desde el ViewModel
         homeViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
-            binding.albumRecyclerView.adapter = AlbumAdapter(albums)
+            binding.recyclerViewAlbums.adapter = AlbumAdapter(albums)
         }
 
         // Llamada inicial para cargar los álbumes
