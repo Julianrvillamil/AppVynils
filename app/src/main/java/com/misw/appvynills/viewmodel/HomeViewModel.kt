@@ -8,17 +8,16 @@ import com.misw.appvynills.model.Album
 
 class HomeViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
-    /*private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text*/
-
-    //private val albumRepository: AlbumRepository = AlbumRepository(application)
-
     private val _albumsLiveData = MutableLiveData<List<Album>>()
     val albumsLiveData: LiveData<List<Album>> get() = _albumsLiveData
 
-    fun fetchAlbums() {
+    fun fetchAlbums()  {
+        /*albumRepository.getAlbums { result ->
+            result?.let {
+                _albumsLiveData.value = it
+            }
+        }*/
+        // Aquí llamamos a la función para que inicie la solicitud
         albumRepository.getAlbums()
     }
 }
