@@ -25,6 +25,9 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+android-volley = { module = "com.android.volley:volley", version = "1.2.1" }
+picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
