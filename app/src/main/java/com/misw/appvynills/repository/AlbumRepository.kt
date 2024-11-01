@@ -2,63 +2,58 @@ package com.misw.appvynills.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.MutableLiveData
-import com.android.volley.VolleyError
 import com.misw.appvynills.brokers.VolleyBroker
 import com.misw.appvynills.model.Album
 import org.json.JSONArray
-import org.json.JSONException
 
 class AlbumRepository(private val context: Context) {
 
-    private val albumsLiveData = MutableLiveData<List<Album>>()
     private val volleyBroker = VolleyBroker(context)
 
-    fun getAlbums():LiveData<List<Album>> {
-        val urlPath = "albums"
-        Log.d("AlbumRepository", "Fetching albums from urlpath: $urlPath")
-        val request = VolleyBroker.getRequest(
-            path = urlPath,
-            responseListener = { response ->
-                try {
-                    Log.d("AlbumRepository", "Verificando response albums: $response")
-                    val albumList = mutableListOf<Album>()
-                    val jsonArray = JSONArray(response)
-                    Log.d("AlbumRepository", "Response received: $response")
-                    for (i in 0 until jsonArray.length()) {
-                        val albumJson = jsonArray.getJSONObject(i)
+    fun getAlbums(callback: (List<Album>?) -> Unit) {
+        val path = "albums" // Agrega el endpoint sin la base URL
 
-                        val album = Album(
-                            id = albumJson.getInt("id"),
-                            name = albumJson.getString("name"),
-                            genre = albumJson.getString("genre"),
-                            cover = albumJson.getString("cover"),
-                            releaseDate = albumJson.getString("releaseDate"),
-                            description = albumJson.getString("description"),
-                            recordLabel = albumJson.getString("recordLabel"),
-                            tracks = albumJson.getJSONArray("tracks"),
-                            performers = albumJson.getJSONArray("performers"),
-                            comments = albumJson.getJSONArray("comments")
-                        )
-                        albumList.add(album)
-                    }
-                    Log.d("AlbumRepository", "Albums parsed successfully: $albumList")
-                    albumsLiveData.postValue(albumList)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    albumsLiveData.postValue(emptyList())  // En caso de error, pasa una lista vacía
-                    Log.e("AlbumRepository", "Error parsing JSON: ${e.message}")
-                }
+        val request = VolleyBroker.getRequest(
+            path,
+            responseListener =  { response ->
+                Log.d("AlbumRepository", "Verificando response albums como String: $response")
+                // Convierte el String response a JSONArray
+                val jsonArray = JSONArray(response)
+                Log.d("AlbumRepository", "Verificando response albums como JSONArray : $jsonArray")
+                val albumList = parseAlbums(jsonArray)
+                Log.d("AlbumRepository", "Verificando response albums como albumList : $albumList")
+                callback(albumList)
             },
-            errorListener = { error: VolleyError ->
-                Log.e("AlbumRepository", "Volley Error: ${error.message}")
+            errorListener =  { error ->
                 error.printStackTrace()
-                albumsLiveData.postValue(emptyList())
+                callback(null)
             }
         )
+
         volleyBroker.instance.add(request)
-        return albumsLiveData
+    }
+
+    private fun parseAlbums(response: JSONArray): List<Album> {
+        val albumList = mutableListOf<Album>()
+        for (i in 0 until response.length()) {
+            val albumJson = response.getJSONObject(i)
+            val album = Album(
+                id = albumJson.getInt("id"),
+                name = albumJson.getString("name"),
+                genre = albumJson.getString("genre"),
+                cover = albumJson.getString("cover"),
+                releaseDate = albumJson.getString("releaseDate"),
+                description = albumJson.getString("description"),
+                recordLabel = albumJson.getString("recordLabel"),
+                tracks = albumJson.getJSONArray("tracks"),
+                performers = albumJson.getJSONArray("performers"),
+                comments = albumJson.getJSONArray("comments")
+            )
+            albumList.add(album)
+        }
+        return albumList
     }
 
 }

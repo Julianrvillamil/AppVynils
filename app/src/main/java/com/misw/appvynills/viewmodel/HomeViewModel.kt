@@ -12,12 +12,10 @@ class HomeViewModel(private val albumRepository: AlbumRepository) : ViewModel() 
     val albumsLiveData: LiveData<List<Album>> get() = _albumsLiveData
 
     fun fetchAlbums()  {
-        /*albumRepository.getAlbums { result ->
+        albumRepository.getAlbums { result ->
             result?.let {
                 _albumsLiveData.value = it
             }
-        }*/
-        // Aquí llamamos a la función para que inicie la solicitud
-        albumRepository.getAlbums()
+        }
     }
 }

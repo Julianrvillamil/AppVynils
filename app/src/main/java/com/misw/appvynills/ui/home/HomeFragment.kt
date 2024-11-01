@@ -1,6 +1,7 @@
 package com.misw.appvynills.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +24,10 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var albumAdapter: AlbumAdapter
-    //private val homeViewModel: HomeViewModel by viewModels()
-    // viewModels para instanciar el ViewModel de este fragmento
 
     private val homeViewModel: HomeViewModel by viewModels {
         ViewModelFactory(AlbumRepository(requireContext()))
     }
-
 
 
     override fun onCreateView(
@@ -37,25 +35,34 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        albumAdapter = AlbumAdapter(emptyList())
+        binding.recyclerViewAlbums.adapter = albumAdapter
+        binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
         val root: View = binding.root
 
-        /*val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = albumAdapter */
 
+        // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
+        homeViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
+            if (albums.isNotEmpty()) {
+                albumAdapter.updateAlbums(albums)
+                Log.d("HomeFragment", "Número de álbumes: ${albums.size}")
+            } else {
+                Log.d("HomeFragment", "La lista de álbumes está vacía")
+            }
+        }
 
-        /*val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        // Llama a la función para obtener los datos
+        homeViewModel.fetchAlbums()
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        /*
         // Inicializa el adapter y configura el RecyclerView
         albumAdapter = AlbumAdapter(emptyList())
 
@@ -65,11 +72,15 @@ class HomeFragment : Fragment() {
 
         // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
         homeViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
+            Log.d("HomeFragment", "Albums received in HomeFragment: $albums")
             albumAdapter.updateAlbums(albums)
         }
 
         // Llama a la función para obtener los datos
         homeViewModel.fetchAlbums()
+
+
+         */
     }
 
     override fun onDestroyView() {
