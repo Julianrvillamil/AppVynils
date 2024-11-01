@@ -9,6 +9,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
+
 class VolleyBroker constructor(context: Context) {
 
     val instance: RequestQueue by lazy {
@@ -16,7 +17,7 @@ class VolleyBroker constructor(context: Context) {
     }
 
     companion object{
-        const val BASE_URL= "http://10.0.2.2:3000/"
+        const val BASE_URL= "https://vynils-back-heroku.herokuapp.com/"
         fun getRequest(
             path:String
             , responseListener: Response.Listener<String>
