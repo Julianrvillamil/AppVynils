@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.misw.appvynills.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_artists"
+        android:name="com.misw.appvynills.ui.artist.ArtistFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_artists" />
 
     <fragment
         android:id="@+id/navigation_notifications"

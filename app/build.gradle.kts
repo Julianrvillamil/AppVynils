@@ -62,5 +62,16 @@ dependencies {
     //implementation 'com.android.volley:volley:1.2.1'
     implementation(libs.android.volley)
     implementation(libs.picasso)
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.retrofit2.converter)
+
+    // Mockito core para pruebas unitarias
+    testImplementation(libs.mockito.core)
+
+    // Mockito-Kotlin (opcional, para mejorar la integración con Kotlin)
+    testImplementation(libs.mockito.kotlin)
+
+    // Biblioteca de pruebas de corrutinas si usas funciones suspend
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
 }
