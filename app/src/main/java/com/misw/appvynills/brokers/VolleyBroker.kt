@@ -16,7 +16,7 @@ class VolleyBroker constructor(context: Context) {
     }
 
     companion object{
-        const val BASE_URL= "http://10.0.2.2:3000/"
+        const val BASE_URL= "http://192.168.1.30:3000/"
         fun getRequest(
             path:String
             , responseListener: Response.Listener<String>

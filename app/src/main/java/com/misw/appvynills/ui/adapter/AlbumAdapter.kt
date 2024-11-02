@@ -1,44 +1,45 @@
 package com.misw.appvynills.ui.adapter
 
-import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
-import android.view.ViewGroup
-import com.misw.appvynills.databinding.ItemAlbumBinding
-import com.squareup.picasso.Picasso
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.misw.appvynills.R
 import com.misw.appvynills.model.Album
+import com.misw.appvynills.databinding.ItemAlbumBinding
+import com.squareup.picasso.Picasso
 
-
-class AlbumAdapter(private var albumList: List<Album>):
-    RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
+class AlbumAdapter(
+    private var albumList: List<Album>,
+    private val onAlbumClick: (Album) -> Unit // Listener para manejar el clic en el álbum
+) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     fun updateAlbums(newAlbums: List<Album>) {
         albumList = newAlbums
         notifyDataSetChanged()
     }
+
     inner class AlbumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val albumCover: ImageView = itemView.findViewById(R.id.albumCover)
         private val albumTitle: TextView = itemView.findViewById(R.id.albumTitle)
         private val albumGenre: TextView = itemView.findViewById(R.id.albumGenre)
 
-
         fun bind(album: Album) {
-           /* Log.d("AlbumAdapter", "Título del álbum: ${album.name}")
-            Log.d("AlbumAdapter", "Género del álbum: ${album.genre}")
-            Log.d("AlbumAdapter", "URL de portada del álbum: ${album.cover}")
-            */
             Picasso.get()
-                .load(album.cover) // 'album.coverUrl' con la propiedad que contenga la URL de la imagen
-                .placeholder(R.drawable.ic_launcher_background) // Imagen de marcador de posición mientras se carga
-                .error(R.drawable.ic_launcher_foreground) // Imagen que se mostrará si ocurre un error al cargar
-                .into(albumCover) // El ImageView donde se cargará la imagen
-            //albumCover.setImageResource(R.drawable.placeholder) // Cambia esto por la lógica de carga
+                .load(album.cover)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(albumCover)
+
             albumTitle.text = album.name
             albumGenre.text = album.genre
+
+            // Configura el clic en el álbum para navegar al detalle
+            itemView.setOnClickListener {
+                onAlbumClick(album) // Llama al listener con el álbum seleccionado
+            }
         }
     }
 
@@ -53,6 +54,4 @@ class AlbumAdapter(private var albumList: List<Album>):
     }
 
     override fun getItemCount(): Int = albumList.size
-
-
 }

@@ -3,23 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
+    <!-- Fragmento Home que muestra la lista de álbumes -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.misw.appvynills.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <!-- Acción para navegar al fragmento de detalles del álbum -->
+        <action
+            android:id="@+id/action_home_to_albumDetail"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
 
+    <!-- Fragmento para el dashboard -->
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.misw.appvynills.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
+    <!-- Fragmento para las notificaciones -->
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.misw.appvynills.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <!-- Fragmento para el detalle del álbum -->
+    <fragment
+        android:id="@+id/albumDetailFragment"
+        android:name="com.misw.appvynills.ui.album.AlbumDetailFragment"
+        android:label="Detalle del Álbum">
+        <!-- Argumento para recibir el ID del álbum -->
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

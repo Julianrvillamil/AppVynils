@@ -2,6 +2,8 @@ package com.misw.appvynills.repository
 
 import android.content.Context
 import android.util.Log
+import org.json.JSONObject
+
 
 import androidx.lifecycle.MutableLiveData
 import com.misw.appvynills.brokers.VolleyBroker
@@ -27,6 +29,39 @@ class AlbumRepository(private val context: Context) {
                 callback(albumList)
             },
             errorListener =  { error ->
+                Log.e("VolleyError", "Network error: ${error.message}")
+                error.printStackTrace()
+                callback(null)
+            }
+        )
+
+        volleyBroker.instance.add(request)
+    }
+
+    fun getAlbumById(id: Int, callback: (Album?) -> Unit) {
+        val path = "albums/$id"
+
+        val request = VolleyBroker.getRequest(
+            path,
+            responseListener = { response ->
+                Log.d("AlbumRepository", "Response album como String: $response")
+                val albumJson = JSONObject(response)
+                val album = Album(
+                    id = albumJson.getInt("id"),
+                    name = albumJson.getString("name"),
+                    cover = albumJson.getString("cover"),
+                    releaseDate = albumJson.getString("releaseDate"),
+                    description = albumJson.getString("description"),
+                    genre = albumJson.getString("genre"),
+                    recordLabel = albumJson.getString("recordLabel"),
+                    tracks = albumJson.getJSONArray("tracks"),
+                    performers = albumJson.getJSONArray("performers"),
+                    comments = albumJson.getJSONArray("comments")
+                )
+                callback(album)
+            },
+            errorListener = { error ->
+                Log.e("VolleyError", "Network error: ${error.message}")
                 error.printStackTrace()
                 callback(null)
             }
