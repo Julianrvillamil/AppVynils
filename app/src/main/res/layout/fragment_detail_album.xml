@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.home.AlbumDetailFragment">
+    tools:context=".ui.home.AlbumDetailFragment"
+    android:padding="16dp">
 
+
+    <!-- Album Cover Image -->
     <ImageView
         android:id="@+id/albumCover"
         android:layout_width="200dp"
@@ -13,25 +16,133 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/album_cover" />
+        android:contentDescription="@string/album_cover"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@drawable/ic_launcher_background" />
 
+    <!-- Album Name -->
     <TextView
-        android:id="@+id/albumTitle"
+        android:id="@+id/albumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/albumCover"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        tools:text="Album Name" />
 
+    <!-- Album Genre -->
     <TextView
         android:id="@+id/albumGenre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/albumTitle"
+        app:layout_constraintTop_toBottomOf="@id/albumName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp" />
+        android:textSize="16sp"
+        tools:text="Genre: Rock" />
+
+    <!-- Release Date -->
+    <TextView
+        android:id="@+id/albumReleaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/albumGenre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        tools:text="Release Date: 2022-01-01" />
+
+    <!-- Record Label -->
+    <TextView
+        android:id="@+id/albumRecordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/albumReleaseDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        tools:text="Record Label: Universal Music" />
+
+    <!-- Album Description -->
+    <TextView
+        android:id="@+id/albumDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/albumRecordLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        tools:text="Album Description goes here. This is a brief description of the album content." />
+
+    <!-- Tracks Section -->
+    <TextView
+        android:id="@+id/tracksLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/albumDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/album_tracks"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tracksList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tracksLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        tools:text="1. Track Name - 3:45\n2. Another Track - 4:12" />
+
+    <!-- Performers Section -->
+    <TextView
+        android:id="@+id/performersLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tracksList"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/album_performers"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/performersList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/performersLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        tools:text="Performer 1\nPerformer 2" />
+
+    <!-- Comments Section -->
+    <TextView
+        android:id="@+id/commentsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/performersList"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/album_comments"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/commentsList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/commentsLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        tools:text="User1: Great album! ⭐⭐⭐⭐\nUser2: Love this music. ⭐⭐⭐⭐⭐" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

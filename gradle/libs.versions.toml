@@ -32,4 +32,6 @@ picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+navigation = { id ="androidx.navigation.navigation-plugin", version.ref = "navigationUiKtx" }
+navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationUiKtx" }
 

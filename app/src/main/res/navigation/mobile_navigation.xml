@@ -5,11 +5,32 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.misw.appvynills.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment"
+            app:popUpTo="@id/navigation_home"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumDetailFragment"
+        android:name="com.misw.appvynills.ui.home.AlbumDetailFragment"
+        tools:layout="@layout/fragment_detail_album">
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_dashboard"

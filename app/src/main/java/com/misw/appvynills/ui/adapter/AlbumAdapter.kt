@@ -15,7 +15,8 @@ import com.misw.appvynills.model.Album
 import com.misw.appvynills.ui.home.AlbumDetailFragment
 
 
-class AlbumAdapter(private var albumList: List<Album>):
+class AlbumAdapter(private var albumList: List<Album>,
+                   private val onAlbumClick: (Int) -> Unit):
     RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
 
     fun updateAlbums(newAlbums: List<Album>) {
@@ -42,13 +43,9 @@ class AlbumAdapter(private var albumList: List<Album>):
             albumTitle.text = album.name
             albumGenre.text = album.genre
 
-            // Configura el clic en la imagen para abrir AlbumDetailActivity
+            // Configura el clic en la imagen para abrir AlbumDetailFragment
             albumCover.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, AlbumDetailFragment::class.java).apply {
-                    putExtra("album", album) // Pasa el objeto album
-                }
-                context.startActivity(intent)
+                onAlbumClick(album.id) // Llama al lambda con el ID del álbum
             }
         }
     }

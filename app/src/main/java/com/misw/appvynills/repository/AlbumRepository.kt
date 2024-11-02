@@ -10,6 +10,7 @@ import com.misw.appvynills.model.Comment
 import com.misw.appvynills.model.Performer
 import com.misw.appvynills.model.Track
 import org.json.JSONArray
+import org.json.JSONObject
 
 class AlbumRepository(private val context: Context) {
 
@@ -38,6 +39,26 @@ class AlbumRepository(private val context: Context) {
         volleyBroker.instance.add(request)
     }
 
+    fun getAlbumDetails(albumId: Int, callback: (Album?) -> Unit) {
+        val path = "albums/$albumId" // Endpoint specYific del álbum
+
+        val request = VolleyBroker.getRequest(
+            path,
+            responseListener = { response ->
+                Log.d("AlbumRepository", "getAlbumDetails -> Verification response albums como String: $response")
+                val albumJson = JSONObject(response)
+                val albumDetails = parseAlbum(albumJson)
+                Log.d("AlbumRepository", "getAlbumDetails 3-> Verification response albums details: $albumDetails")
+                callback(albumDetails)
+            },
+            errorListener = { error ->
+                error.printStackTrace()
+                callback(null)
+            }
+        )
+        volleyBroker.instance.add(request)
+    }
+
     private fun parseAlbums(response: JSONArray): List<Album> {
         val albumList = mutableListOf<Album>()
         for (i in 0 until response.length()) {
@@ -63,6 +84,21 @@ class AlbumRepository(private val context: Context) {
             albumList.add(album)
         }
         return albumList
+    }
+
+    private fun parseAlbum(json: JSONObject): Album {
+        return Album(
+            id = json.getInt("id"),
+            name = json.getString("name"),
+            cover = json.getString("cover"),
+            releaseDate = json.getString("releaseDate"),
+            description = json.getString("description"),
+            genre = json.getString("genre"),
+            recordLabel = json.getString("recordLabel"),
+            tracks = parseTracks(json.getJSONArray("tracks")),
+            performers = parsePerformers(json.getJSONArray("performers")),
+            comments = parseComments(json.getJSONArray("comments"))
+        )
     }
 
     private fun parseTracks(tracksJson: JSONArray): List<Track> {
