@@ -15,6 +15,7 @@ mockitoKotlin = "4.0.0"
 navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 retrofit = "2.9.0"
+espressoContrib = "3.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +35,7 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
 retrofit2-retrofit = { module= "com.squareup.retrofit2:retrofit", version.ref="retrofit"}
 retrofit2-converter = { module= "com.squareup.retrofit2:converter-gson", version.ref="retrofit"}
+androidx-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoContrib" }
 
 
 [plugins]
