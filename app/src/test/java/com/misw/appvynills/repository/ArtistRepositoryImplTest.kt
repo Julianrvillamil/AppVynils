@@ -7,6 +7,7 @@ import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -34,5 +35,32 @@ class ArtistRepositoryImplTest {
         println(response)
         // Verifica si la respuesta es exitosa
         assertTrue(response is DataState.Success && response.data.isNotEmpty())
+    }
+
+    @Test
+    fun testGetArtistByIdFromAPI() = runBlocking {
+        print("Entrando a testGetArtistByIdFromAPI \n")
+        // Given
+        val artistId = 100
+
+        // When
+        val response = artistRepository.getArtistById(artistId)
+
+        // Then
+        assertNotNull("La respuesta no debería ser nula", response)
+
+        assertTrue("La respuesta debería ser DataState.Success", response is DataState.Success)
+
+        // Si es Success, verificamos los datos del artista
+        if (response is DataState.Success) {
+            val artist = response.data
+            print(artist)
+            assertNotNull("Los datos del artista no deberían ser nulos", artist)
+
+            // Verificamos los campos específicos del artista
+            assertNotNull("El ID del artista no debería ser nulo", artist.id)
+            assertNotNull("El nombre del artista no debería ser nulo", artist.name)
+            // Añade más verificaciones según los campos que tenga tu clase Artist
+        }
     }
 }

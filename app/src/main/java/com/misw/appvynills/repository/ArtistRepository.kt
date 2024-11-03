@@ -9,6 +9,7 @@ import com.misw.appvynills.utils.resultOrError
 
 interface ArtistRepository {
     suspend fun getArtists(): DataState<List<Artist>>
+    suspend fun getArtistById(id: Int): DataState<Artist>
 }
 
 class ArtistRepositoryImpl(
@@ -21,6 +22,19 @@ class ArtistRepositoryImpl(
             // Transforma la lista de ArtistResponse a Artist utilizando la función de extensión
             val artists = artistResponses.DTO()
             DataState.Success(artists) // Devuelve la lista transformada
+        } catch (e: Exception) {
+            e.printStackTrace()
+            DataState.Error(e) // Manejo de error
+        }
+    }
+
+    override suspend fun getArtistById(id: Int): DataState<Artist> {
+        return try {
+            // Obtiene el ArtistResponse desde el servicio
+            val artistResponse = artistService.getArtistById(id)
+            // Transforma el ArtistResponse a Artist utilizando la función de extensión
+            val artist = artistResponse.DTO()
+            DataState.Success(artist) // Devuelve el objeto tranformado
         } catch (e: Exception) {
             e.printStackTrace()
             DataState.Error(e) // Manejo de error
