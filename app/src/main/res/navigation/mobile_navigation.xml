@@ -18,7 +18,7 @@
         <action
             android:id="@+id/action_homeFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:popUpTo="@id/navigation_home"/>
+            app:popUpTo="@id/navigation_artists"/>
     </fragment>
 
     <fragment
@@ -42,9 +42,9 @@
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_artists">
         <action
-            android:id="@+id/action_homeFragment_to_artistDetailFragment"
+            android:id="@+id/action_artistFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
-            app:popUpTo="@id/navigation_home"/>
+            app:popUpTo="@id/navigation_artists" />
 
     </fragment>
 
@@ -56,11 +56,12 @@
             android:name="artistId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_artistDetailFragment_to_navigation_home"
-            app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home"
+            android:id="@+id/action_artistDetailFragment_to_navigation_artists"
+            app:destination="@id/navigation_artists"
+            app:popUpTo="@id/navigation_artists"
             app:popUpToInclusive="false"/>
     </fragment>
+
 
 
 

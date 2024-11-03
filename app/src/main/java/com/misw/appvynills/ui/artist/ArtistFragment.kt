@@ -48,8 +48,8 @@ class ArtistFragment : Fragment() {
 
 
         artistAdapter = ArtistAdapter(emptyList()) { artistId ->
-            // Configura la navegación al fragmento de detalle con el albumId
-            val action = HomeFragmentDirections.actionHomeFragmentToArtistDetailFragment(artistId)
+            // Configura la navegación al fragmento de detalle con el artistId
+            val action = ArtistFragmentDirections.actionArtistFragmentToArtistDetailFragment(artistId)
             findNavController().navigate(action)
         }
         binding.recyclerViewArtists.apply {

@@ -7,7 +7,7 @@ data class ArtistResponse(
     val name: String,
     val image: String,
     val description: String,
-    val birtDate: String,
+    val birthDate: String,
     val albums: List<AlbumResponse>,
 
 )

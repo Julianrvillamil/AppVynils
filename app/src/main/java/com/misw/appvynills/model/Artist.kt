@@ -8,7 +8,7 @@ data class Artist(
     val name: String,
     val image: String,
     val description: String,
-    val birtDate: String,
+    val birthDate: String,
     val albums: List<Album>? = null
 )
 
@@ -17,7 +17,7 @@ fun ArtistResponse.DTO() = Artist(
     name = name,
     image = image,
     description = description,
-    birtDate = birtDate ?: "Fecha no disponible",
+    birthDate = birthDate ?: "Fecha no disponible",
     albums = albums?.map { it.toAlbum() }
 )
 

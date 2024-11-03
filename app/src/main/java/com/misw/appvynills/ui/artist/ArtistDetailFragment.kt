@@ -102,6 +102,10 @@ class ArtistDetailFragment : Fragment() {
             artistTitle.text = artist.name
             // Cargar la imagen del artista usando Picasso
             Picasso.get().load(artist.image).into(artistCover)
+            artistDescription.text = artist.description
+            albumsList.text =
+                artist.albums?.joinToString(separator = "\n") { it.name } ?: ""
+            birthDate.text = artist.birthDate
         }
     }
 
