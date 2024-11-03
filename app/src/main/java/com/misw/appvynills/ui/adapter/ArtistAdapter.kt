@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.misw.appvynills.R
 import com.misw.appvynills.model.Artist
 import com.squareup.picasso.Picasso
+import android.util.Log
 
-class ArtistAdapter(private var artists: List<Artist>) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
+class ArtistAdapter(private var artists: List<Artist>,
+                    private val onArtistClick: (Int) -> Unit) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_artist, parent, false)
@@ -28,7 +30,7 @@ class ArtistAdapter(private var artists: List<Artist>) : RecyclerView.Adapter<Ar
         notifyDataSetChanged()
     }
 
-    class ArtistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ArtistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val artistCover: ImageView = itemView.findViewById(R.id.artistCover)
         private val artistTitle: TextView = itemView.findViewById(R.id.artistTitle)
 
@@ -40,6 +42,12 @@ class ArtistAdapter(private var artists: List<Artist>) : RecyclerView.Adapter<Ar
                 .error(R.drawable.ic_launcher_foreground) // Imagen que se mostrará si ocurre un error al cargar
                 .into(artistCover) // El ImageView donde se cargará la imagen
             artistTitle.text = artist.name
+
+            // Configura el clic en la imagen para abrir ArtistDetailFragment
+            artistCover.setOnClickListener {
+                Log.d("ArtistAdapter", "id: ${artist.id}")
+                onArtistClick(artist.id) // Llama al lambda con el ID del álbum
+            }
         }
     }
 }
