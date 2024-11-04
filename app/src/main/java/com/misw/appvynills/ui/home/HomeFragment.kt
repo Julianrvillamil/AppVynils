@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.misw.appvynills.R
@@ -37,9 +38,17 @@ class HomeFragment : Fragment() {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        albumAdapter = AlbumAdapter(emptyList())
-        binding.recyclerViewAlbums.adapter = albumAdapter
-        binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
+        albumAdapter = AlbumAdapter(emptyList()) { albumId ->
+            // Configura la navegación al fragmento de detalle con el albumId
+            val action = HomeFragmentDirections.actionHomeFragmentToAlbumDetailFragment(albumId)
+            findNavController().navigate(action)
+        }
+        binding.recyclerViewAlbums.apply {
+            adapter = albumAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        //binding.recyclerViewAlbums.adapter = albumAdapter
+        //binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
         val root: View = binding.root
 
 
@@ -56,32 +65,10 @@ class HomeFragment : Fragment() {
         // Llama a la función para obtener los datos
         homeViewModel.fetchAlbums()
 
+
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        /*
-        // Inicializa el adapter y configura el RecyclerView
-        albumAdapter = AlbumAdapter(emptyList())
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewAlbums)
-        recyclerView.adapter = albumAdapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
-        homeViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
-            Log.d("HomeFragment", "Albums received in HomeFragment: $albums")
-            albumAdapter.updateAlbums(albums)
-        }
-
-        // Llama a la función para obtener los datos
-        homeViewModel.fetchAlbums()
-
-
-         */
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

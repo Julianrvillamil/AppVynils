@@ -1,5 +1,6 @@
 package com.misw.appvynills.ui.adapter
 
+import android.content.Intent
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
@@ -11,9 +12,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.misw.appvynills.R
 import com.misw.appvynills.model.Album
+import com.misw.appvynills.ui.home.AlbumDetailFragment
 
 
-class AlbumAdapter(private var albumList: List<Album>):
+class AlbumAdapter(private var albumList: List<Album>,
+                   private val onAlbumClick: (Int) -> Unit):
     RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
 
     fun updateAlbums(newAlbums: List<Album>) {
@@ -39,6 +42,11 @@ class AlbumAdapter(private var albumList: List<Album>):
             //albumCover.setImageResource(R.drawable.placeholder) // Cambia esto por la lógica de carga
             albumTitle.text = album.name
             albumGenre.text = album.genre
+
+            // Configura el clic en la imagen para abrir AlbumDetailFragment
+            albumCover.setOnClickListener {
+                onAlbumClick(album.id) // Llama al lambda con el ID del álbum
+            }
         }
     }
 
