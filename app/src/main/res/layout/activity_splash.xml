@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"> <!-- Cambia el color de fondo si lo deseas -->
+
+    <!-- Imagen de fondo o logo principal -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_splash_vinyls" />
+
+    <!-- Texto encima de la imagen -->
+    <TextView
+        android:id="@+id/appNameTextView"
+        android:layout_width="277dp"
+        android:layout_height="142dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="@string/splash_welcome"
+        android:textColor="@android:color/white"
+        android:textSize="52sp"
+        android:textStyle="bold|italic" />
+</FrameLayout>
+

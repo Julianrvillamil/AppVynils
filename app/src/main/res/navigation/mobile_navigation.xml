@@ -5,17 +5,66 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.misw.appvynills.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment"
+            app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_homeFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:popUpTo="@id/navigation_artists"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.misw.appvynills.ui.dashboard.DashboardFragment"
+        android:id="@+id/albumDetailFragment"
+        android:name="com.misw.appvynills.ui.home.AlbumDetailFragment"
+        tools:layout="@layout/fragment_detail_album">
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_artists"
+        android:name="com.misw.appvynills.ui.artist.ArtistFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_artists">
+        <action
+            android:id="@+id/action_artistFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment"
+            app:popUpTo="@id/navigation_artists" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.misw.appvynills.ui.artist.ArtistDetailFragment"
+        tools:layout="@layout/fragment_detail_artist">
+        <argument
+            android:name="artistId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_navigation_artists"
+            app:destination="@id/navigation_artists"
+            app:popUpTo="@id/navigation_artists"
+            app:popUpToInclusive="false"/>
+    </fragment>
+
+
+
+
 
     <fragment
         android:id="@+id/navigation_notifications"

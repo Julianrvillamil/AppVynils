@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
@@ -48,7 +49,31 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.espresso.contrib)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Retrofit
+    //implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    //implementation 'com.google.code.gson:gson:2.8.2'
+    //implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
+    //Volley APIS REST
+    //implementation 'com.android.volley:volley:1.2.1'
+    implementation(libs.android.volley)
+    implementation(libs.picasso)
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.retrofit2.converter)
+
+    // Mockito core para pruebas unitarias
+    testImplementation(libs.mockito.core)
+
+    // Mockito-Kotlin (opcional, para mejorar la integración con Kotlin)
+    testImplementation(libs.mockito.kotlin)
+
+    // Biblioteca de pruebas de corrutinas si usas funciones suspend
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
 }

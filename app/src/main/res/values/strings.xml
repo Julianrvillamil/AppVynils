@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">AppVynills</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Albumes</string>
+    <string name="album_tracks">Pistas</string>
+    <string name="album_performers">Artistas</string>
+    <string name="album_comments">Comentarios</string>
+    <string name="title_dashboard">Artistas</string>
+    <string name="title_notifications">Colecciones</string>
+    <string name="album_cover">imageee</string>
+    <string name="splash_welcome">Vinilos App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="birth_date">Fecha de nacimiento</string>
 </resources>
