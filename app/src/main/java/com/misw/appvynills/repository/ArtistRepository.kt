@@ -1,45 +1,40 @@
 package com.misw.appvynills.repository
 
-import android.service.autofill.Dataset
+import com.misw.appvynills.dto.ArtistResponse
 import com.misw.appvynills.model.Artist
 import com.misw.appvynills.model.DTO
 import com.misw.appvynills.service.ArtistServiceAdapter
 import com.misw.appvynills.utils.DataState
-import com.misw.appvynills.utils.resultOrError
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.Dispatchers
+import retrofit2.HttpException
+import java.io.IOException
 
-interface ArtistRepository {
-    suspend fun getArtists(): DataState<List<Artist>>
-    suspend fun getArtistById(id: Int): DataState<Artist>
-}
+class ArtistRepository(private val artistService: ArtistServiceAdapter) {
 
-class ArtistRepositoryImpl(
-    private val artistService: ArtistServiceAdapter
-): ArtistRepository {
-    override suspend fun getArtists(): DataState<List<Artist>> {
-        return try {
-            // Obtiene la lista de ArtistResponse desde el servicio
-            val artistResponses = artistService.getArtists()
-            // Transforma la lista de ArtistResponse a Artist utilizando la función de extensión
-            val artists = artistResponses.DTO()
-            DataState.Success(artists) // Devuelve la lista transformada
-        } catch (e: Exception) {
-            e.printStackTrace()
-            DataState.Error(e) // Manejo de error
+    fun getArtists(): Flow<DataState<List<Artist>>> = flow {
+        emit(DataState.Loading)
+        try {
+            val response: List<ArtistResponse> = artistService.getArtists()
+            emit(DataState.Success(response.map { it.DTO() }))
+        } catch (e: IOException) {
+            emit(DataState.Error(e))
+        } catch (e: HttpException) {
+            emit(DataState.Error(e))
         }
     }
 
-    override suspend fun getArtistById(id: Int): DataState<Artist> {
-        return try {
-            // Obtiene el ArtistResponse desde el servicio
-            val artistResponse = artistService.getArtistById(id)
-            // Transforma el ArtistResponse a Artist utilizando la función de extensión
-            val artist = artistResponse.DTO()
-            DataState.Success(artist) // Devuelve el objeto tranformado
-        } catch (e: Exception) {
-            e.printStackTrace()
-            DataState.Error(e) // Manejo de error
+    fun getArtistById(id: Int): Flow<DataState<Artist>> = flow {
+        emit(DataState.Loading)
+        try {
+            val response: ArtistResponse = artistService.getArtistById(id)
+            emit(DataState.Success(response.DTO()))
+        } catch (e: IOException) {
+            emit(DataState.Error(e))
+        } catch (e: HttpException) {
+            emit(DataState.Error(e))
         }
     }
-
 }
-

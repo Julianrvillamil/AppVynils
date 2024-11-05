@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safeargs)
+    id("kotlin-kapt")
 }
 
 android {
@@ -76,4 +77,8 @@ dependencies {
     // Biblioteca de pruebas de corrutinas si usas funciones suspend
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
+    implementation(libs.glide)
+    implementation(libs.glide.okhttp)
+    kapt(libs.glide.compiler)
+    implementation(libs.okhttp)
 }

@@ -16,7 +16,6 @@ import com.misw.appvynills.databinding.FragmentArtistsBinding
 import com.misw.appvynills.model.Artist
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.repository.ArtistRepository
-import com.misw.appvynills.repository.ArtistRepositoryImpl
 import com.misw.appvynills.ui.adapter.AlbumAdapter
 import com.misw.appvynills.ui.adapter.ArtistAdapter
 import com.misw.appvynills.ui.home.HomeFragmentDirections
@@ -35,7 +34,7 @@ class ArtistFragment : Fragment() {
     val artistService = NetworkModule.artistServiceAdapter
 
     private val viewModel: ListArtistViewModel by viewModels {
-        val artistRepository = ArtistRepositoryImpl(artistService)
+        val artistRepository = ArtistRepository(artistService)
         ViewModelFactory(AlbumRepository(requireContext()), artistRepository)
     }
 

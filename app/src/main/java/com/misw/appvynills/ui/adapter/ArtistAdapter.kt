@@ -10,6 +10,8 @@ import com.misw.appvynills.R
 import com.misw.appvynills.model.Artist
 import com.squareup.picasso.Picasso
 import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ArtistAdapter(private var artists: List<Artist>,
                     private val onArtistClick: (Int) -> Unit) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
@@ -36,11 +38,28 @@ class ArtistAdapter(private var artists: List<Artist>,
 
 
         fun bind(artist: Artist) {
-            Picasso.get()
+
+            try {
+                if (!artist.image.isNullOrEmpty()) {
+                    Glide.with(itemView.context)
+                        .load(artist.image)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .into(artistCover)
+                } else {
+                    artistCover.visibility = View.GONE
+                }
+            } catch (e: Exception) {
+                artistCover.visibility = View.GONE
+            }
+
+            /*Picasso.get()
                 .load(artist.image) // 'album.coverUrl' con la propiedad que contenga la URL de la imagen
                 .placeholder(R.drawable.ic_launcher_background) // Imagen de marcador de posición mientras se carga
                 .error(R.drawable.ic_launcher_foreground) // Imagen que se mostrará si ocurre un error al cargar
-                .into(artistCover) // El ImageView donde se cargará la imagen
+                .into(artistCover) // El ImageView donde se cargará la imagen */
+
             artistTitle.text = artist.name
 
             // Configura el clic en la imagen para abrir ArtistDetailFragment

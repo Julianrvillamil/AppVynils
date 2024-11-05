@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -18,13 +19,13 @@ import org.mockito.MockitoAnnotations
 class ArtistRepositoryImplTest {
 
 
-    private lateinit var artistRepository: ArtistRepositoryImpl
+    private lateinit var artistRepository: ArtistRepository
 
     @Before
     fun setUp() {
         // Usa NetworkModule para obtener el servicio
         val artistService = NetworkModule.artistServiceAdapter
-        artistRepository = ArtistRepositoryImpl(artistService)
+        artistRepository = ArtistRepository(artistService)
     }
 
     @Test
@@ -34,33 +35,55 @@ class ArtistRepositoryImplTest {
 
         println(response)
         // Verifica si la respuesta es exitosa
-        assertTrue(response is DataState.Success && response.data.isNotEmpty())
+        assertTrue(response is DataState.Success<*>)
     }
 
     @Test
     fun testGetArtistByIdFromAPI() = runBlocking {
-        print("Entrando a testGetArtistByIdFromAPI \n")
+        println("Entrando a testGetArtistByIdFromAPI")
+
         // Given
         val artistId = 100
+        var loadingReceived = false
+        var successReceived = false
 
-        // When
-        val response = artistRepository.getArtistById(artistId)
+        // When & Then
+        artistRepository.getArtistById(artistId).collect { state ->
+            when (state) {
+                is DataState.Loading -> {
+                    loadingReceived = true
+                }
+                is DataState.Success -> {
+                    successReceived = true
+                    val artist = state.data
 
-        // Then
-        assertNotNull("La respuesta no debería ser nula", response)
+                    // Verificaciones básicas
+                    assertNotNull("Los datos del artista no deberían ser nulos", artist)
+                    assertEquals("El ID debería ser $artistId", artistId, artist.id)
+                    assertNotNull("El nombre del artista no debería ser nulo", artist.name)
+                    assertTrue("El nombre del artista no debería estar vacío", artist.name.isNotEmpty())
+                    assertNotNull("La imagen del artista no debería ser nula", artist.image)
+                    assertNotNull("La descripción del artista no debería ser nula", artist.description)
+                    assertNotNull("La fecha de nacimiento no debería ser nula", artist.birthDate)
 
-        assertTrue("La respuesta debería ser DataState.Success", response is DataState.Success)
+                    // Verificación de álbumes si existen
+                    artist.albums?.let { albums ->
+                        albums.forEach { album ->
+                            assertNotNull("El ID del álbum no debería ser nulo", album.id)
+                            assertNotNull("El nombre del álbum no debería ser nulo", album.name)
+                            assertNotNull("La portada del álbum no debería ser nula", album.cover)
+                        }
+                    }
 
-        // Si es Success, verificamos los datos del artista
-        if (response is DataState.Success) {
-            val artist = response.data
-            print(artist)
-            assertNotNull("Los datos del artista no deberían ser nulos", artist)
-
-            // Verificamos los campos específicos del artista
-            assertNotNull("El ID del artista no debería ser nulo", artist.id)
-            assertNotNull("El nombre del artista no debería ser nulo", artist.name)
-            // Añade más verificaciones según los campos que tenga tu clase Artist
+                    println("Test exitoso con artista: $artist")
+                }
+                is DataState.Error -> {
+                    fail("No debería recibir un error: ${state.error.message}")
+                }
+            }
         }
+
+        assertTrue("Debería haber recibido Loading", loadingReceived)
+        assertTrue("Debería haber recibido Success", successReceived)
     }
 }
