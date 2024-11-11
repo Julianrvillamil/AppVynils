@@ -1,144 +1,126 @@
 package com.misw.appvynills.ui.artist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.misw.appvynills.brokers.NetworkModule
 import com.misw.appvynills.databinding.FragmentDetailArtistBinding
-import com.misw.appvynills.model.Album
 import com.misw.appvynills.model.Artist
-import com.misw.appvynills.repository.AlbumRepository
-import com.misw.appvynills.repository.ArtistRepositoryImpl
+import com.misw.appvynills.repository.ArtistRepository
 import com.misw.appvynills.utils.DataState
-import com.squareup.picasso.Picasso
+import kotlinx.coroutines.launch
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 
-/**
- * Fragment que muestra los detalles de un artista específico
- */
 class ArtistDetailFragment : Fragment() {
-
-    // Usando view binding para acceder a las vistas de manera segura
     private var _binding: FragmentDetailArtistBinding? = null
-    // Esta propiedad solo es válida entre onCreateView y onDestroyView
     private val binding get() = _binding!!
 
-    // Repositorio para acceder a los datos del artista
-    private lateinit var artistRepository: ArtistRepositoryImpl
+    private lateinit var artistRepository: ArtistRepository
     private val artistService = NetworkModule.artistServiceAdapter
 
-    // Obtiene el ID del artista de los argumentos del fragmento
-    private val artistId: Int by lazy {
-        arguments?.getInt("artistId") ?: -1
-    }
+    // Usar navArgs() en lugar de arguments
+    private val args: ArtistDetailFragmentArgs by navArgs()
+    private val artistId: Int get() = args.artistId
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflar el layout y configurar el binding
         _binding = FragmentDetailArtistBinding.inflate(inflater, container, false)
-        artistRepository = ArtistRepositoryImpl(artistService)
 
-        // Configurar la barra superior de la aplicación
-        (activity as? AppCompatActivity)?.apply {
-            // Habilitar el botón de retroceso
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.title = "Detalle Artista"
-        }
+        // Inicializar el repositorio
+        artistRepository = ArtistRepository(artistService)
 
-        // Verificar que tengamos un ID válido antes de cargar los detalles
-        if (artistId != -1) {
-            fetchArtistDetails(artistId)
-        } else {
-            Toast.makeText(context, "Error: ID del artista no encontrado", Toast.LENGTH_SHORT).show()
-        }
+        // Cargar los datos del artista
+        fetchArtistDetails(artistId)
 
         return binding.root
     }
 
-    /**
-     * Obtiene los detalles del artista usando corrutinas
-     * @param artistId El ID del artista a buscar
-     */
     private fun fetchArtistDetails(artistId: Int) {
-        // Usar viewLifecycleOwner.lifecycleScope para respetar el ciclo de vida del Fragment
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                // Mostrar estado de carga inmediatamente
-                setupLoadingState()
+                artistRepository.getArtistById(artistId).collect { state ->
+                    when (state) {
+                        is DataState.Loading -> {
 
-                // Manejar los diferentes estados de la respuesta
-                when (val result = artistRepository.getArtistById(artistId)) {
-                    is DataState.Success -> {
-                        displayArtistDetails(result.data)
-                    }
-                    is DataState.Error -> {
-                        showError(result.error.message ?: "Error desconocido")
-                    }
-                    is DataState.Loading -> {
-                        // El estado de carga ya se maneja arriba
+                        }
+                        is DataState.Success -> {
+
+                            val artist = state.data
+                            println("Test exitoso con artista: $artist")
+                            displayArtistDetails(artist as Artist)
+
+                        }
+                        is DataState.Error -> {
+                            Toast.makeText(
+                                context,
+                                "Error inesperado",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
+
             } catch (e: Exception) {
-                showError("Error al cargar el artista: ${e.message}")
+
+                Toast.makeText(
+                    context,
+                    "Error inesperado: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    /**
-     * Muestra los detalles del artista en la interfaz
-     * @param artist El objeto Artist con los datos a mostrar
-     */
     private fun displayArtistDetails(artist: Artist) {
         binding.apply {
-            // Actualizar el nombre del artista
             artistTitle.text = artist.name
-            // Cargar la imagen del artista usando Picasso
-            Picasso.get().load(artist.image).into(artistCover)
+
+            context?.let { ctx ->
+                if (artist.image.isNotEmpty()) {
+                    Glide.with(ctx)
+                        .load(artist.image)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(artistCover)
+                    artistCover.visibility = View.VISIBLE
+                } else {
+                    artistCover.visibility = View.GONE
+                }
+            }
+
             artistDescription.text = artist.description
-            albumsList.text =
-                artist.albums?.joinToString(separator = "\n") { it.name } ?: ""
+
+            val albumsText = artist.albums?.let { albums ->
+                if (albums.isNotEmpty()) {
+                    albums.joinToString(separator = "\n") { it.name }
+                } else {
+                    "No hay álbumes disponibles"
+                }
+            } ?: "No hay álbumes disponibles"
+            albumsList.text = albumsText
+
             birthDate.text = artist.birthDate
         }
     }
 
-    /**
-     * Configura la interfaz para mostrar el estado de carga
-     */
-    private fun setupLoadingState() {
-        binding.apply {
-            // TODO: Implementar la lógica del estado de carga
-            // Ejemplo:
-            // progressBar.visibility = View.VISIBLE
-            // contentLayout.visibility = View.GONE
-        }
-    }
-
-    /**
-     * Muestra un mensaje de error al usuario
-     * @param message El mensaje de error a mostrar
-     */
-    private fun showError(message: String) {
-        // Ocultar el indicador de carga si está visible
-        // binding.progressBar.visibility = View.GONE
-
-        // Mostrar el mensaje de error
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-    }
-
-    /**
-     * Limpia los recursos cuando se destruye la vista
-     */
     override fun onDestroyView() {
         super.onDestroyView()
-        // Evitar fugas de memoria
         _binding = null
     }
+
+    // Ya no necesitamos el companion object con newInstance
 }

@@ -16,6 +16,8 @@ navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 retrofit = "2.9.0"
 espressoContrib = "3.6.1"
+glide = "4.16.0"
+okhttp = "4.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,7 +38,10 @@ picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
 retrofit2-retrofit = { module= "com.squareup.retrofit2:retrofit", version.ref="retrofit"}
 retrofit2-converter = { module= "com.squareup.retrofit2:converter-gson", version.ref="retrofit"}
 androidx-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoContrib" }
-
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-okhttp = { group = "com.github.bumptech.glide", name = "okhttp3-integration", version.ref = "glide" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
