@@ -9,51 +9,66 @@ import com.misw.appvynills.model.Album
 import com.misw.appvynills.model.Comment
 import com.misw.appvynills.model.Performer
 import com.misw.appvynills.model.Track
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class AlbumRepository(private val context: Context) {
 
     private val volleyBroker = VolleyBroker(context)
 
-    fun getAlbums(callback: (List<Album>?) -> Unit) {
-        val path = "albums" // Agrega el endpoint sin la base URL
+    suspend fun getAlbums(): List<Album> = suspendCoroutine { cont ->
 
         val request = VolleyBroker.getRequest(
-            path,
-            responseListener =  { response ->
-                Log.d("AlbumRepository", "Verificando response albums como String: $response")
-                // Convierte el String response a JSONArray
-                val jsonArray = JSONArray(response)
-                Log.d("AlbumRepository", "Verificando response albums como JSONArray : $jsonArray")
-                val albumList = parseAlbums(jsonArray)
-                Log.d("AlbumRepository", "Verificando response albums como albumList : $albumList")
-                callback(albumList)
+            "albums",
+            responseListener = { response ->
+                try {
+                    Log.d("AlbumRepository", "Verificando response albums como String: $response")
+                    // Convierte el String response a JSONArray
+                    val jsonArray = JSONArray(response)
+                    Log.d("AlbumRepository", "Verificando response albums como JSONArray : $jsonArray")
+                    val albumList = parseAlbums(jsonArray)
+                    Log.d("AlbumRepository", "Verificando response albums como albumList : $albumList")
+                    cont.resume(albumList) // Retorna la lista de álbumes
+                } catch (e: Exception) {
+                    cont.resumeWithException(e) // Retorna la excepción en caso de error de parsing
+                }
             },
-            errorListener =  { error ->
+            errorListener = { error ->
                 error.printStackTrace()
-                callback(null)
+                cont.resumeWithException(error) // Retorna la excepción en caso de error de red
             }
         )
 
         volleyBroker.instance.add(request)
     }
 
-    fun getAlbumDetails(albumId: Int, callback: (Album?) -> Unit) {
-        val path = "albums/$albumId" // Endpoint specYific del álbum
+
+
+
+    suspend fun getAlbumDetails(albumId: Int): Album? = suspendCoroutine { cont ->
+        val path = "albums/$albumId" // Endpoint specific del álbum id
 
         val request = VolleyBroker.getRequest(
             path,
             responseListener = { response ->
-                Log.d("AlbumRepository", "getAlbumDetails -> Verification response albums como String: $response")
-                val albumJson = JSONObject(response)
-                val albumDetails = parseAlbum(albumJson)
-                Log.d("AlbumRepository", "getAlbumDetails 3-> Verification response albums details: $albumDetails")
-                callback(albumDetails)
+                try {
+                    Log.d("AlbumRepository", "getAlbumDetails -> Verification response albums como String: $response")
+                    val albumJson = JSONObject(response)
+                    val albumDetails = parseAlbum(albumJson)
+                    Log.d("AlbumRepository", "getAlbumDetails 3-> Verification response albums details: $albumDetails")
+                    cont.resume(albumDetails)
+                }catch (e: Exception) {
+                    cont.resumeWithException(e)
+                }
+
             },
             errorListener = { error ->
-                error.printStackTrace()
-                callback(null)
+                cont.resumeWithException(error)
             }
         )
         volleyBroker.instance.add(request)

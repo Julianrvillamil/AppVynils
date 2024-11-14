@@ -81,4 +81,7 @@ dependencies {
     implementation(libs.glide.okhttp)
     kapt(libs.glide.compiler)
     implementation(libs.okhttp)
+
+    //coroutines
+    implementation(libs.coroutines)
 }

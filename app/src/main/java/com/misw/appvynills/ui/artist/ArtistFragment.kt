@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.misw.appvynills.R
 import com.misw.appvynills.brokers.NetworkModule
+import com.misw.appvynills.brokers.VolleyBroker
 import com.misw.appvynills.databinding.FragmentArtistsBinding
 import com.misw.appvynills.model.Artist
 import com.misw.appvynills.repository.AlbumRepository

@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.misw.appvynills.R
 import com.misw.appvynills.databinding.FragmentDetailAlbumBinding
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso
 import com.misw.appvynills.model.Album
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.ui.adapter.AlbumAdapter
+import kotlinx.coroutines.launch
 
 class AlbumDetailFragment : Fragment(){
 
@@ -39,7 +41,9 @@ class AlbumDetailFragment : Fragment(){
 
         // Verifica que el ID del álbum sea válido
         if (albumId != -1) {
-            fetchAlbumDetails(albumId)
+            viewLifecycleOwner.lifecycleScope.launch {
+                fetchAlbumDetails(albumId)
+            }
         } else {
             Toast.makeText(context, "Error: ID del álbum no encontrado mi Rey", Toast.LENGTH_SHORT).show()
         }
@@ -48,15 +52,17 @@ class AlbumDetailFragment : Fragment(){
         return binding.root
     }
 
-    private fun fetchAlbumDetails(albumId: Int) {
+    private suspend fun fetchAlbumDetails(albumId: Int) {
         // Llama al repositorio para obtener la información detallada del álbum
-        AlbumRepository(requireContext()).getAlbumDetails(albumId) { albumDetails ->
+        try {
+            val albumDetails = AlbumRepository(requireContext()).getAlbumDetails(albumId)
             if (albumDetails != null) {
                 displayAlbumDetails(albumDetails)
-            } else {
-                Toast.makeText(context, "Error al cargar detalles del álbum", Toast.LENGTH_SHORT).show()
             }
+        }catch (e: Exception){
+            Toast.makeText(context, "Error al cargar detalles del álbum", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun displayAlbumDetails(album: Album) {
