@@ -70,7 +70,7 @@ El proyecto sigue una arquitectura MVVM que divide responsabilidades en diferent
 
 A continuación se muestra un diagrama de la arquitectura simplificada del proyecto para referencia:
 
-<<<<< implementar diagramas >>>>
+[Diagrama de componentes](https://github.com/user-attachments/assets/4849a457-7030-4e27-9b82-f357f40c95fe)
 
 ## Uso
 
