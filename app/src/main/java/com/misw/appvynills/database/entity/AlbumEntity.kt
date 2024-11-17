@@ -19,6 +19,7 @@ data class AlbumEntity(
     val recordLabel: String
 )
 
+
 // TrackEntity.kt
 @Entity(tableName = "tracks")
 data class TrackEntity(

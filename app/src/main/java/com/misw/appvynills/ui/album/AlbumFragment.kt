@@ -98,20 +98,7 @@ class AlbumFragment : Fragment() {
                 Log.e("AlbumFragment", "Error: $it")
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
             }
-            /*if (hasError) {
-                Snackbar.make(
-                    binding.root,
-                    "Error al cargar los álbumes",
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }*/
         }
-
-        /*albumViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            errorMessage?.let { showError(it) }
-        }*/
-
-
     }
     private fun loadAlbums() {
         try {

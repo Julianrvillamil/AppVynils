@@ -22,19 +22,19 @@ import com.misw.appvynills.database.entity.TrackEntity
     version = 1,
     exportSchema = false
 )
-abstract class VynilRoomDatabase: RoomDatabase() {
+abstract class VinylRoomDatabase: RoomDatabase() {
 
     abstract fun albumDao(): AlbumDao
 
     companion object {
         @Volatile
-        private var INSTANCE: VynilRoomDatabase? = null
+        private var INSTANCE: VinylRoomDatabase? = null
 
-        fun getDatabase(context: Context): VynilRoomDatabase{
+        fun getDatabase(context: Context): VinylRoomDatabase{
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    VynilRoomDatabase::class.java,
+                    VinylRoomDatabase::class.java,
                     "vinyls_database"
                 ).build()
                 INSTANCE = instance

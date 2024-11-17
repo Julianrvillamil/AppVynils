@@ -5,8 +5,9 @@ import android.util.Log
 import com.bumptech.glide.load.engine.Resource
 
 import com.misw.appvynills.brokers.VolleyBroker
-import com.misw.appvynills.database.VynilRoomDatabase
+import com.misw.appvynills.database.VinylRoomDatabase
 import com.misw.appvynills.database.entity.AlbumPerformerCrossRef
+import com.misw.appvynills.database.entity.toDomainModel
 import com.misw.appvynills.database.entity.toEntityModels
 import com.misw.appvynills.models.Album
 import com.misw.appvynills.models.Comment
@@ -23,7 +24,7 @@ import kotlin.coroutines.suspendCoroutine
 class AlbumRepository(private val context: Context) {
 
     private val volleyBroker = VolleyBroker(context)
-    private val albumDao = VynilRoomDatabase.getDatabase(context).albumDao()
+    private val albumDao = VinylRoomDatabase.getDatabase(context).albumDao()
 
     suspend fun getAlbums(): Result<List<Album>> = withContext(Dispatchers.IO) {
         try {
@@ -126,9 +127,70 @@ class AlbumRepository(private val context: Context) {
     }
 
 
+    suspend fun getAlbumDetails(albumId: Int): Album? = withContext(Dispatchers.IO){
 
+        try {
+            val albumWithRelations = albumDao.getAlbumWithRelations(albumId)
+            albumWithRelations?.toDomainModel()
+        } catch (e: Exception) {
+            Log.e("AlbumRepository", "Error obteniendo detalles del álbum desde la base de datos", e)
+            null
+        }
+        /*try{
+            // Primero, intenta obtener el álbum desde la base de datos local
+            val localAlbum = albumDao.getAlbumWithRelations(albumId)?.let { albumWithRelations ->
+                Album(
+                    id = albumWithRelations.album.id,
+                    name = albumWithRelations.album.name,
+                    genre = albumWithRelations.album.genre,
+                    cover = albumWithRelations.album.cover,
+                    releaseDate = albumWithRelations.album.releaseDate,
+                    description = albumWithRelations.album.description,
+                    recordLabel = albumWithRelations.album.recordLabel,
+                    tracks = albumWithRelations.tracks.map { trackEntity ->
+                        Track(
+                            id = trackEntity.id,
+                            name = trackEntity.name,
+                            duration = trackEntity.duration
+                        )
+                    },
+                    performers = albumWithRelations.performers.map { performerEntity ->
+                        Performer(
+                            id = performerEntity.id,
+                            name = performerEntity.name,
+                            image = performerEntity.image,
+                            description = performerEntity.description,
+                            birthDate = performerEntity.birthDate
+                        )
+                    },
+                    comments = albumWithRelations.comments.map { commentEntity ->
+                        Comment(
+                            id = commentEntity.id,
+                            description = commentEntity.description,
+                            rating = commentEntity.rating
+                        )
+                    }
+                )
+            }
 
-    suspend fun getAlbumDetails(albumId: Int): Album? = suspendCoroutine { cont ->
+            // Si existe el álbum localmente, lo retornamos
+            if (localAlbum != null) {
+                return@withContext localAlbum
+            }
+
+            // Si no existe localmente, intenta obtenerlo de la red
+            val remoteAlbum = getAlbumDetailsFromNetwork(albumId)
+            remoteAlbum?.let {
+                saveAlbumsToDatabase(listOf(it)) // Guarda en la base de datos local
+            }
+            remoteAlbum
+        } catch (e: Exception) {
+            Log.e("AlbumRepository", "Error obteniendo detalles del álbum", e)
+            null // Retorna null en caso de error
+        }*/
+    }
+
+    private suspend fun getAlbumDetailsFromNetwork(albumId: Int): Album? = suspendCoroutine { cont ->
         val path = "albums/$albumId" // Endpoint specific del álbum id
 
         val request = VolleyBroker.getRequest(

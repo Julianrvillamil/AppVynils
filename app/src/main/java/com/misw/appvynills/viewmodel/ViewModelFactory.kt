@@ -14,6 +14,9 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(AlbumViewModel::class.java) -> {
                 AlbumViewModel(albumRepository) as T
             }
+            modelClass.isAssignableFrom(AlbumDetailViewModel::class.java) -> {
+                AlbumDetailViewModel(albumRepository) as T
+            }
             modelClass.isAssignableFrom(ListArtistViewModel::class.java) -> {
                 ListArtistViewModel(artistRepository ?: throw IllegalArgumentException("ArtistRepository is required")) as T
             }
