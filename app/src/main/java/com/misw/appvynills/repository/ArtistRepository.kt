@@ -1,14 +1,12 @@
 package com.misw.appvynills.repository
 
 import com.misw.appvynills.dto.ArtistResponse
-import com.misw.appvynills.model.Artist
-import com.misw.appvynills.model.DTO
+import com.misw.appvynills.models.Artist
+import com.misw.appvynills.models.DTO
 import com.misw.appvynills.service.ArtistServiceAdapter
 import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.Dispatchers
 import retrofit2.HttpException
 import java.io.IOException
 

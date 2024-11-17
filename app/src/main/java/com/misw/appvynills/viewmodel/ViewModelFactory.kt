@@ -11,8 +11,8 @@ class ViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(albumRepository) as T
+            modelClass.isAssignableFrom(AlbumViewModel::class.java) -> {
+                AlbumViewModel(albumRepository) as T
             }
             modelClass.isAssignableFrom(ListArtistViewModel::class.java) -> {
                 ListArtistViewModel(artistRepository ?: throw IllegalArgumentException("ArtistRepository is required")) as T

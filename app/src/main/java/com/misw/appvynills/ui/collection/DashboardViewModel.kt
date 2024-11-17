@@ -1,4 +1,4 @@
-package com.misw.appvynills.ui.dashboard
+package com.misw.appvynills.ui.collection
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

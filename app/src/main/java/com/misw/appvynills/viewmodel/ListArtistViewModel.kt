@@ -2,7 +2,7 @@ package com.misw.appvynills.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.misw.appvynills.model.Artist
+import com.misw.appvynills.models.Artist
 import com.misw.appvynills.repository.ArtistRepository
 import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.flow.MutableStateFlow

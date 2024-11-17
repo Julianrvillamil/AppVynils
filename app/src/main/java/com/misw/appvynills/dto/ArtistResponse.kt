@@ -1,7 +1,5 @@
 package com.misw.appvynills.dto
 
-import com.misw.appvynills.model.Album
-
 data class ArtistResponse(
     val id: Int,
     val name: String,

@@ -1,7 +1,6 @@
 package com.misw.appvynills.ui.artist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.misw.appvynills.brokers.NetworkModule
 import com.misw.appvynills.databinding.FragmentDetailArtistBinding
-import com.misw.appvynills.model.Artist
+import com.misw.appvynills.models.Artist
 import com.misw.appvynills.repository.ArtistRepository
 import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.launch
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 
 class ArtistDetailFragment : Fragment() {
     private var _binding: FragmentDetailArtistBinding? = null

@@ -10,20 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.misw.appvynills.R
 import com.misw.appvynills.brokers.NetworkModule
-import com.misw.appvynills.brokers.VolleyBroker
 import com.misw.appvynills.databinding.FragmentArtistsBinding
-import com.misw.appvynills.model.Artist
+import com.misw.appvynills.models.Artist
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.repository.ArtistRepository
-import com.misw.appvynills.ui.adapter.AlbumAdapter
 import com.misw.appvynills.ui.adapter.ArtistAdapter
-import com.misw.appvynills.ui.home.HomeFragmentDirections
 import com.misw.appvynills.utils.DataState
 import com.misw.appvynills.viewmodel.ListArtistViewModel
 import com.misw.appvynills.viewmodel.ViewModelFactory
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 

@@ -1,4 +1,4 @@
-package com.misw.appvynills.ui.dashboard
+package com.misw.appvynills.ui.collection
 
 import android.os.Bundle
 import android.view.LayoutInflater

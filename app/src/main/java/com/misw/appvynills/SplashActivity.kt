@@ -10,13 +10,13 @@ class SplashActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash) // Configura el layout que crearás
+        setContentView(R.layout.activity_splash) // Configura el layout
 
         // Espera de 3 segundos antes de redirigir
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Cierra el SplashActivity para que no se regrese a esta pantalla
-        }, 3000) // Cambia a 5000 para 5 segundos si prefieres
+            finish() // Cierra el SplashActivity
+        }, 3000) // Cambia a 5000 para 5 segundos
     }
 }

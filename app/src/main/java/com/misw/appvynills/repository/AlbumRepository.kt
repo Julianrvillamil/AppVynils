@@ -2,13 +2,16 @@ package com.misw.appvynills.repository
 
 import android.content.Context
 import android.util.Log
+import com.bumptech.glide.load.engine.Resource
 
-import androidx.lifecycle.MutableLiveData
 import com.misw.appvynills.brokers.VolleyBroker
-import com.misw.appvynills.model.Album
-import com.misw.appvynills.model.Comment
-import com.misw.appvynills.model.Performer
-import com.misw.appvynills.model.Track
+import com.misw.appvynills.database.VynilRoomDatabase
+import com.misw.appvynills.database.entity.AlbumPerformerCrossRef
+import com.misw.appvynills.database.entity.toEntityModels
+import com.misw.appvynills.models.Album
+import com.misw.appvynills.models.Comment
+import com.misw.appvynills.models.Performer
+import com.misw.appvynills.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -20,13 +23,70 @@ import kotlin.coroutines.suspendCoroutine
 class AlbumRepository(private val context: Context) {
 
     private val volleyBroker = VolleyBroker(context)
+    private val albumDao = VynilRoomDatabase.getDatabase(context).albumDao()
 
-    suspend fun getAlbums(): List<Album> = suspendCoroutine { cont ->
+    suspend fun getAlbums(): Result<List<Album>> = withContext(Dispatchers.IO) {
+        try {
+            // Intenta obtener datos de la red primero
+            val remoteAlbums = getAlbumsFromNetwork()
+            saveAlbumsToDatabase(remoteAlbums)
+            Result.success(remoteAlbums)
+        } catch (e: Exception) {
+            // Si hay error en la red, usa datos locales si existen
+            try {
+                val localAlbums = albumDao.getAllAlbumsWithRelations().map { albumWithRelations ->
+                    Album(
+                        id = albumWithRelations.album.id,
+                        name = albumWithRelations.album.name,
+                        genre = albumWithRelations.album.genre,
+                        cover = albumWithRelations.album.cover,
+                        releaseDate = albumWithRelations.album.releaseDate,
+                        description = albumWithRelations.album.description,
+                        recordLabel = albumWithRelations.album.recordLabel,
+                        tracks = albumWithRelations.tracks.map { trackEntity ->
+                            Track(
+                                id = trackEntity.id,
+                                name = trackEntity.name,
+                                duration = trackEntity.duration
+                            )
+                        },
+                        performers = albumWithRelations.performers.map { performerEntity ->
+                            Performer(
+                                id = performerEntity.id,
+                                name = performerEntity.name,
+                                image = performerEntity.image,
+                                description = performerEntity.description,
+                                birthDate = performerEntity.birthDate
+                            )
+                        },
+                        comments = albumWithRelations.comments.map { commentEntity ->
+                            Comment(
+                                id = commentEntity.id,
+                                description = commentEntity.description,
+                                rating = commentEntity.rating
+                            )
+                        }
+                    )
+                }
 
+                if (localAlbums.isNotEmpty()) {
+                    Result.success(localAlbums)
+                } else {
+                    Result.failure(Exception("No hay datos disponibles"))
+                }
+            } catch (dbError: Exception) {
+                Result.failure(dbError)
+            }
+        }
+    }
+
+    private suspend fun getAlbumsFromNetwork(): List<Album> = suspendCoroutine { cont ->
+        Log.d("AlbumRepository", "Iniciando solicitud de álbumes desde la red...")
         val request = VolleyBroker.getRequest(
             "albums",
             responseListener = { response ->
                 try {
+                    Log.d("AlbumRepository", "Respuesta recibida: $response")
                     Log.d("AlbumRepository", "Verificando response albums como String: $response")
                     // Convierte el String response a JSONArray
                     val jsonArray = JSONArray(response)
@@ -35,16 +95,34 @@ class AlbumRepository(private val context: Context) {
                     Log.d("AlbumRepository", "Verificando response albums como albumList : $albumList")
                     cont.resume(albumList) // Retorna la lista de álbumes
                 } catch (e: Exception) {
+                    Log.e("AlbumRepository", "Error procesando la respuesta", e)
                     cont.resumeWithException(e) // Retorna la excepción en caso de error de parsing
                 }
             },
             errorListener = { error ->
+                Log.e("AlbumRepository", "Error en la petición de red", error)
                 error.printStackTrace()
                 cont.resumeWithException(error) // Retorna la excepción en caso de error de red
             }
         )
-
         volleyBroker.instance.add(request)
+    }
+
+    private suspend fun saveAlbumsToDatabase(albums: List<Album>) {
+        albumDao.deleteEverything()
+
+        albums.forEach { album ->
+            val relations = album.toEntityModels()
+            albumDao.insertAlbum(relations.album)
+            albumDao.insertTracks(relations.tracks)
+            albumDao.insertPerformers(relations.performers)
+            albumDao.insertComments(relations.comments)
+            albumDao.insertAlbumPerformerCrossRefs(
+                relations.performers.map { performer ->
+                    AlbumPerformerCrossRef(album.id, performer.id)
+                }
+            )
+        }
     }
 
 
