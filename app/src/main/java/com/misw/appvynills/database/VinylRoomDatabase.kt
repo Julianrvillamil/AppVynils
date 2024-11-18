@@ -8,9 +8,14 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.misw.appvynills.database.dao.AlbumDao
 import com.misw.appvynills.database.dao.ArtistDao
+import com.misw.appvynills.database.dao.CollectorDao
 import com.misw.appvynills.database.entity.AlbumEntity
 import com.misw.appvynills.database.entity.AlbumPerformerCrossRef
 import com.misw.appvynills.database.entity.ArtistEntity
+import com.misw.appvynills.database.entity.CollectorAlbumEntity
+import com.misw.appvynills.database.entity.CollectorCommentEntity
+import com.misw.appvynills.database.entity.CollectorEntity
+import com.misw.appvynills.database.entity.CollectorPerformerEntity
 import com.misw.appvynills.database.entity.CommentEntity
 import com.misw.appvynills.database.entity.PerformerEntity
 import com.misw.appvynills.database.entity.TrackEntity
@@ -23,15 +28,19 @@ import com.misw.appvynills.database.entity.TrackEntity
         CommentEntity::class,
         AlbumPerformerCrossRef::class,
         ArtistEntity::class,
-
+        CollectorEntity::class,
+        CollectorAlbumEntity::class,
+        CollectorPerformerEntity::class,
+        CollectorCommentEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class VinylRoomDatabase: RoomDatabase() {
 
     abstract fun albumDao(): AlbumDao
     abstract fun artistDao(): ArtistDao
+    abstract fun collectorDao(): CollectorDao
 
     companion object {
         @Volatile
@@ -57,6 +66,66 @@ abstract class VinylRoomDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                CREATE TABLE IF NOT EXISTS collectors (
+                    id INTEGER PRIMARY KEY NOT NULL,
+                    name TEXT NOT NULL,
+                    telephone TEXT NOT NULL,
+                    email TEXT NOT NULL
+                )
+            """
+                )
+                db.execSQL(
+                    """
+                CREATE TABLE IF NOT EXISTS collector_comments (
+                    id INTEGER PRIMARY KEY NOT NULL,
+                    description TEXT NOT NULL,
+                    rating INTEGER NOT NULL,
+                    collectorId INTEGER NOT NULL,
+                    FOREIGN KEY(collectorId) REFERENCES collectors(id) ON DELETE CASCADE
+                )
+            """
+                )
+                db.execSQL(
+                    """
+                CREATE TABLE IF NOT EXISTS collector_performers (
+                    id INTEGER PRIMARY KEY NOT NULL,
+                    name TEXT NOT NULL,
+                    image TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    birthDate TEXT,
+                    creationDate TEXT,
+                    collectorId INTEGER NOT NULL,
+                    FOREIGN KEY(collectorId) REFERENCES collectors(id) ON DELETE CASCADE
+                )
+            """
+                )
+                db.execSQL(
+                    """
+                CREATE TABLE IF NOT EXISTS collector_albums (
+                    id INTEGER PRIMARY KEY NOT NULL,
+                    price INTEGER NOT NULL,
+                    status TEXT NOT NULL,
+                    collectorId INTEGER NOT NULL,
+                    FOREIGN KEY(collectorId) REFERENCES collectors(id) ON DELETE CASCADE
+                )
+            """
+                )
+                // Agrega explícitamente el índice en collectorId
+                db.execSQL(
+                    """
+                CREATE INDEX index_collector_albums_collectorId ON collector_albums(collectorId)
+            """
+                )
+            }
+        }
+
+
+
+
         fun getDatabase(context: Context): VinylRoomDatabase{
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -64,8 +133,8 @@ abstract class VinylRoomDatabase: RoomDatabase() {
                     VinylRoomDatabase::class.java,
                     "vinyls_database"
                 )
-                    .addMigrations(MIGRATION_1_2)
-                    //.fallbackToDestructiveMigration()
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
