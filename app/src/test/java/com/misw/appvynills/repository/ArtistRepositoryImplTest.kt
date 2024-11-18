@@ -1,6 +1,9 @@
 package com.misw.appvynills.repository
 
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import com.misw.appvynills.brokers.NetworkModule
+import com.misw.appvynills.database.VinylRoomDatabase
 import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -12,14 +15,18 @@ import org.junit.Test
 
 class ArtistRepositoryImplTest {
 
-
+    private lateinit var database: VinylRoomDatabase
     private lateinit var artistRepository: ArtistRepository
 
     @Before
     fun setUp() {
         // Usa NetworkModule para obtener el servicio
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            VinylRoomDatabase::class.java
+        ).allowMainThreadQueries().build()
         val artistService = NetworkModule.artistServiceAdapter
-        artistRepository = ArtistRepository(artistService)
+        artistRepository = ArtistRepository(artistService, database)
     }
 
     @Test
