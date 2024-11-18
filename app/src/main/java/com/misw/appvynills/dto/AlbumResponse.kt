@@ -1,8 +1,8 @@
 package com.misw.appvynills.dto
 
-import com.misw.appvynills.model.Comment
-import com.misw.appvynills.model.Performer
-import com.misw.appvynills.model.Track
+import com.misw.appvynills.models.Comment
+import com.misw.appvynills.models.Performer
+import com.misw.appvynills.models.Track
 
 data class AlbumResponse(
     val id: Int,

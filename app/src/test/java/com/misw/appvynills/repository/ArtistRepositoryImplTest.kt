@@ -1,31 +1,32 @@
 package com.misw.appvynills.repository
 
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import com.misw.appvynills.brokers.NetworkModule
-import com.misw.appvynills.model.Artist
-import com.misw.appvynills.service.ArtistServiceAdapter
+import com.misw.appvynills.database.VinylRoomDatabase
 import com.misw.appvynills.utils.DataState
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 
 class ArtistRepositoryImplTest {
 
-
+    private lateinit var database: VinylRoomDatabase
     private lateinit var artistRepository: ArtistRepository
 
     @Before
     fun setUp() {
         // Usa NetworkModule para obtener el servicio
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            VinylRoomDatabase::class.java
+        ).allowMainThreadQueries().build()
         val artistService = NetworkModule.artistServiceAdapter
-        artistRepository = ArtistRepository(artistService)
+        artistRepository = ArtistRepository(artistService, database)
     }
 
     @Test

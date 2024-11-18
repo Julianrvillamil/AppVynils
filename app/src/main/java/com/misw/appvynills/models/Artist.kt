@@ -1,4 +1,4 @@
-package com.misw.appvynills.model
+package com.misw.appvynills.models
 
 import com.misw.appvynills.dto.AlbumResponse
 import com.misw.appvynills.dto.ArtistResponse

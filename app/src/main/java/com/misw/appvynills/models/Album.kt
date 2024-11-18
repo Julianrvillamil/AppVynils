@@ -1,6 +1,5 @@
-package com.misw.appvynills.model
+package com.misw.appvynills.models
 
-import org.json.JSONArray
 import java.io.Serializable
 
 data class Album(

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.misw.appvynills.R
-import com.misw.appvynills.model.Album
+import com.misw.appvynills.models.Album
 
 class AlbumAdapter(
     private var albumList: List<Album>,

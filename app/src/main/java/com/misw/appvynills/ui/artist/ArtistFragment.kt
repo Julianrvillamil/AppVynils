@@ -5,24 +5,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.misw.appvynills.R
 import com.misw.appvynills.brokers.NetworkModule
+import com.misw.appvynills.database.VinylRoomDatabase
 import com.misw.appvynills.databinding.FragmentArtistsBinding
-import com.misw.appvynills.model.Artist
+import com.misw.appvynills.models.Artist
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.repository.ArtistRepository
-import com.misw.appvynills.ui.adapter.AlbumAdapter
 import com.misw.appvynills.ui.adapter.ArtistAdapter
-import com.misw.appvynills.ui.home.HomeFragmentDirections
 import com.misw.appvynills.utils.DataState
 import com.misw.appvynills.viewmodel.ListArtistViewModel
 import com.misw.appvynills.viewmodel.ViewModelFactory
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -34,7 +32,8 @@ class ArtistFragment : Fragment() {
     val artistService = NetworkModule.artistServiceAdapter
 
     private val viewModel: ListArtistViewModel by viewModels {
-        val artistRepository = ArtistRepository(artistService)
+        val database = VinylRoomDatabase.getDatabase(requireContext())
+        val artistRepository = ArtistRepository(artistService, database)
         ViewModelFactory(AlbumRepository(requireContext()), artistRepository)
     }
 
@@ -59,7 +58,6 @@ class ArtistFragment : Fragment() {
         Log.d("ArtistFragment", "En Oncreate")
         // Llama al método `getArtists()` para obtener los datos
         viewModel.getArtists()
-
         // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
         observeArtists()
 
@@ -70,10 +68,16 @@ class ArtistFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.artistResult.collect { result ->
                 when (result) {
-                    is DataState.Loading -> showLoading()
-                    is DataState.Success -> updateArtistList(result.data)
-                    is DataState.Error -> showError(result.error.message)
-                    null -> TODO()
+                    is DataState.Loading -> binding.loadingIndicator.visibility = View.VISIBLE
+                    is DataState.Success -> {
+                        binding.loadingIndicator.visibility = View.GONE
+                        result.data?.let { artistAdapter.updateArtist(it) }
+                        //artistAdapter.updateArtist(result.data)
+                    }
+                    is DataState.Error -> {
+                        binding.loadingIndicator.visibility = View.GONE
+                        showError(result.error.message)
+                    }
                 }
             }
         }
@@ -88,14 +92,9 @@ class ArtistFragment : Fragment() {
         }
     }
 
-    private fun showLoading() {
-        // Muestra un indicador de carga en tu UI
-        Log.d("ArtistFragment", "Cargando artistas...")
-    }
 
     private fun showError(message: String?) {
-        // Muestra el mensaje de error en tu UI
-        Log.e("ArtistFragment", "Error: $message")
+        Toast.makeText(context, message ?: "Error desconocido", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
