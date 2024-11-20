@@ -19,7 +19,18 @@ data class CollectorEntity(
 )
 
 //CollectorCommentEntity.kt
-@Entity(tableName = "collector_comments")
+//Entity(tableName = "collector_comments")
+@Entity(
+    tableName = "collector_comments",
+    foreignKeys = [
+        ForeignKey(
+            entity = CollectorEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["collectorId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class CollectorCommentEntity(
     @PrimaryKey val id: Int,
     val description: String,
@@ -28,7 +39,18 @@ data class CollectorCommentEntity(
 )
 
 //CollectorPerformerEntity.kt
-@Entity(tableName = "collector_performers")
+@Entity(
+    tableName = "collector_performers",
+    foreignKeys = [
+        ForeignKey(
+            entity = CollectorEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["collectorId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+//@Entity(tableName = "collector_performers")
 data class CollectorPerformerEntity(
     @PrimaryKey val id: Int,
     val name: String,
