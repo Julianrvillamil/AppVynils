@@ -11,4 +11,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="birth_date">Fecha de nacimiento</string>
+    <string name="create_album">crear album</string>
+    <string name="album_genre">Genero</string>
+    <string name="album_description">Descripción</string>
+    <string name="submit">Crear</string>
+    <string name="album_record_label">Record</string>
+    <string name="album_release_date">Fecha del album</string>
+    <string name="album_name">Nombre album</string>
 </resources>

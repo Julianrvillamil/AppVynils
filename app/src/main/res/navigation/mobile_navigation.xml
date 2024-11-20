@@ -22,6 +22,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/createAlbumFragment"
+        android:name="com.misw.appvynills.ui.album.AlbumCreateFragment"
+        android:label="Crear Álbum"
+        tools:layout="@layout/fragment_create_album" />
+
+    <fragment
         android:id="@+id/albumDetailFragment"
         android:name="com.misw.appvynills.ui.album.AlbumDetailFragment"
         tools:layout="@layout/fragment_detail_album">

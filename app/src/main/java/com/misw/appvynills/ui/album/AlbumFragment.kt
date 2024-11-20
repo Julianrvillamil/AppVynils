@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.misw.appvynills.R
 import com.misw.appvynills.databinding.FragmentAlbumBinding
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.ui.adapter.AlbumAdapter
@@ -71,6 +72,7 @@ class AlbumFragment : Fragment() {
             //setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
         }
 
+
     }
 
     private fun setupObservers() {
@@ -81,6 +83,8 @@ class AlbumFragment : Fragment() {
            // binding.recyclerViewAlbums.visibility = if (isLoading) View.GONE else View.VISIBLE
 
         }
+
+
 
         albumViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
             if (!albums.isNullOrEmpty()) {

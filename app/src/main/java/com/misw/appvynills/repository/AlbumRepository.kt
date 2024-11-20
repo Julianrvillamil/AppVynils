@@ -214,6 +214,23 @@ class AlbumRepository(private val context: Context) {
         volleyBroker.instance.add(request)
     }
 
+    suspend fun createAlbum(albumData: JSONObject): Result<Boolean> = suspendCoroutine { cont ->
+        val request = VolleyBroker.postRequest(
+            "albums",
+            albumData,
+            responseListener = { response ->
+                // Si se recibe respuesta, marcar como éxito
+                cont.resume(Result.success(true))
+            },
+            errorListener = { error ->
+                // Si hay error, retornar como fallo
+                cont.resume(Result.failure(error))
+            }
+        )
+        volleyBroker.instance.add(request)
+    }
+
+
     private fun parseAlbums(response: JSONArray): List<Album> {
         val albumList = mutableListOf<Album>()
         for (i in 0 until response.length()) {

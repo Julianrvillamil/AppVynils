@@ -1,0 +1,101 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Campos de entrada -->
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_name"
+                android:inputType="text"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <EditText
+                android:id="@+id/inputCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_cover"
+                android:inputType="textUri"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <EditText
+                android:id="@+id/inputReleaseDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_release_date"
+                android:inputType="date"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <EditText
+                android:id="@+id/inputDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_description"
+                android:inputType="textMultiLine"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <EditText
+                android:id="@+id/inputGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_genre"
+                android:inputType="text"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <EditText
+                android:id="@+id/inputRecordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_record_label"
+                android:inputType="text"
+                android:autofillHints="webUri"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp" />
+
+            <!-- Botón para enviar -->
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:maxWidth="600dp"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
