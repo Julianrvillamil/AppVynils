@@ -1,18 +1,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.album.AlbumCreateFragment">
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,10 +30,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/album_name"
                 android:inputType="text"
-                android:autofillHints="webUri"
                 android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                android:padding="8dp" />
 
             <EditText
                 android:id="@+id/inputCover"
@@ -37,10 +39,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/album_cover"
                 android:inputType="textUri"
-                android:autofillHints="webUri"
                 android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                android:padding="8dp" />
 
             <EditText
                 android:id="@+id/inputReleaseDate"
@@ -48,10 +48,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/album_release_date"
                 android:inputType="date"
-                android:autofillHints="webUri"
                 android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                android:padding="8dp" />
 
             <EditText
                 android:id="@+id/inputDescription"
@@ -59,43 +57,43 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/album_description"
                 android:inputType="textMultiLine"
-                android:autofillHints="webUri"
                 android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                android:padding="8dp" />
 
-            <EditText
-                android:id="@+id/inputGenre"
+            <!-- Género -->
+            <Spinner
+                android:id="@+id/spinnerGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Sello Discográfico -->
+            <Spinner
+                android:id="@+id/spinnerRecordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Botones de acción -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/album_genre"
-                android:inputType="text"
-                android:autofillHints="webUri"
-                android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="end">
 
-            <EditText
-                android:id="@+id/inputRecordLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/album_record_label"
-                android:inputType="text"
-                android:autofillHints="webUri"
-                android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp" />
+                <Button
+                    android:id="@+id/buttonCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/cancel" />
 
-            <!-- Botón para enviar -->
-            <Button
-                android:id="@+id/buttonSubmit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/submit"
-                android:minHeight="48dp"
-                android:padding="8dp"
-                android:maxWidth="600dp"
-                android:layout_marginTop="16dp" />
+                <Button
+                    android:id="@+id/buttonSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:enabled="false" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

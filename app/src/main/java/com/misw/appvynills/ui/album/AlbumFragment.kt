@@ -42,6 +42,15 @@ class AlbumFragment : Fragment() {
         //binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
         val root: View = binding.root
 
+        binding.fabCreateAlbum.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.action_homeFragment_to_createAlbumFragment)
+            } catch (e: Exception) {
+                Log.e("AlbumFragment", "Error en la navegación", e)
+                showError("Error al navegar al fragmento de creación")
+            }
+        }
+
 
         // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
 
@@ -69,7 +78,7 @@ class AlbumFragment : Fragment() {
         binding.recyclerViewAlbums.apply {
             adapter = albumAdapter
             layoutManager = LinearLayoutManager(context)
-            //setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
+            setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
         }
 
 

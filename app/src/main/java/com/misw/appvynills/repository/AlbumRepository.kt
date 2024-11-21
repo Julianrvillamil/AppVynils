@@ -13,6 +13,7 @@ import com.misw.appvynills.models.Album
 import com.misw.appvynills.models.Comment
 import com.misw.appvynills.models.Performer
 import com.misw.appvynills.models.Track
+import com.misw.appvynills.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -215,19 +216,42 @@ class AlbumRepository(private val context: Context) {
     }
 
     suspend fun createAlbum(albumData: JSONObject): Result<Boolean> = suspendCoroutine { cont ->
+        Log.i("AlbumRepository", "Intentando enviar el siguiente JSON: $albumData")
+        Log.i("AlbumRepository", "URL de la solicitud: ${Constants.BASE_URL + "albums"}")
         val request = VolleyBroker.postRequest(
             "albums",
             albumData,
             responseListener = { response ->
+                Log.i("AlbumRepository", "Respuesta del servidor: $response")
+
                 // Si se recibe respuesta, marcar como éxito
                 cont.resume(Result.success(true))
             },
             errorListener = { error ->
+                Log.e("AlbumRepository", "Error al intentar crear el álbum: ${error.message}")
+                if (error.networkResponse != null) {
+                    val statusCode = error.networkResponse.statusCode
+                    val headers = error.networkResponse.headers
+                    val responseBody = String(error.networkResponse.data ?: ByteArray(0))
+
+                    Log.e("AlbumRepository", "Código de estado: $statusCode")
+                    Log.e("AlbumRepository", "Cabeceras del error: $headers")
+                    Log.e("AlbumRepository", "Cuerpo del error: $responseBody")
+                } else {
+                    Log.e("AlbumRepository", "Error sin respuesta de red: ${error.message}")
+                    Log.e("AlbumRepository", "Error sin respuesta de red: ${error}")
+                }
                 // Si hay error, retornar como fallo
                 cont.resume(Result.failure(error))
             }
         )
-        volleyBroker.instance.add(request)
+        try {
+            volleyBroker.instance.add(request)
+            Log.i("AlbumRepository", "Solicitud POST enviada exitosamente.")
+        } catch (e: Exception) {
+            Log.e("AlbumRepository", "Error al enviar la solicitud POST: ${e.message}")
+            cont.resume(Result.failure(e))
+        }
     }
 
 
