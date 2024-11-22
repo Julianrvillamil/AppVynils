@@ -174,7 +174,6 @@ class AlbumCreateFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             Log.i("AlbumCreateFragment", "Enviando solicitud para crear álbum...")
 
-            val result = albumRepository.createAlbum(albumData)
             try {
                 val result = albumRepository.createAlbum(albumData)
                 if (result.isSuccess) {
