@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0dp"
+    android:clipToPadding="false"
     tools:context=".ui.album.AlbumFragment">
+
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -17,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_album"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"/>
+        android:padding="0dp"/>
 
     <!-- ProgressBar -->
     <ProgressBar
@@ -37,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="116dp"
+        app:maxImageSize="38dp"
         android:contentDescription="@string/create_album"
         app:backgroundTint="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.misw.appvynills.R
@@ -77,7 +78,7 @@ class AlbumFragment : Fragment() {
         }
         binding.recyclerViewAlbums.apply {
             adapter = albumAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
             setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
         }
 
