@@ -19,7 +19,14 @@
             android:id="@+id/action_homeFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment"
             app:popUpTo="@id/navigation_artists"/>
+
+        <action
+            android:id="@+id/action_homeFragment_to_createAlbumFragment"
+            app:destination="@id/albumCreateFragment"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false"/>
     </fragment>
+
 
     <fragment
         android:id="@+id/albumDetailFragment"
@@ -30,6 +37,17 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_albumDetailFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumCreateFragment"
+        android:name="com.misw.appvynills.ui.album.AlbumCreateFragment"
+        tools:layout="@layout/fragment_create_album">
+        <action
+            android:id="@+id/action_albumCreateFragment_to_navigation_home"
             app:destination="@id/navigation_home"
             app:popUpTo="@id/navigation_home"
             app:popUpToInclusive="false"/>
@@ -61,9 +79,6 @@
             app:popUpTo="@id/navigation_artists"
             app:popUpToInclusive="false"/>
     </fragment>
-
-
-
 
 
     <fragment

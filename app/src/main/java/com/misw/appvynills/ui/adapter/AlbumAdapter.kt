@@ -32,7 +32,7 @@ class AlbumAdapter(
                     Glide.with(itemView.context)
                         .load(album.cover)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
+                        .skipMemoryCache(false)
                         .dontAnimate()
                         .into(albumCover)
                 } else {
@@ -62,4 +62,5 @@ class AlbumAdapter(
     }
 
     override fun getItemCount(): Int = albumList.size
+
 }
