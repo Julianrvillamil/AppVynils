@@ -53,6 +53,30 @@ class CollectorRepository(private val context: Context) {
         } as Result<List<Collector>>
     }
 
+    suspend fun getCollectorDetails(collectorId: Int): Result<Collector> = withContext(Dispatchers.IO) {
+        try {
+            // Intenta obtener los detalles desde la API
+            val collectorDetails = getCollectorDetailsFromNetwork(collectorId)
+            saveCollectorDetailsToDatabase(collectorDetails) // Guarda en la base de datos local
+            Result.success(collectorDetails)
+        } catch (e: Exception) {
+            Log.e("CollectorRepository", "Error al obtener detalles del coleccionista desde la API: ${e.message}", e)
+            try {
+                // Si falla, intenta obtener datos locales
+                val localCollector = collectorDao.getCollectorById(collectorId)?.toDomainModel()
+                if (localCollector != null) {
+                    Result.success(localCollector)
+                } else {
+                    Result.failure(Exception("No hay detalles disponibles en la API ni en la base de datos local"))
+                }
+            } catch (dbError: Exception) {
+                Log.e("CollectorRepository", "Error al obtener detalles del coleccionista local: ${dbError.message}", dbError)
+                Result.failure(dbError)
+            }
+        }
+    }
+
+
     private suspend fun getCollectorsFromNetwork(): List<Collector> = suspendCoroutine { cont ->
         Log.d("CollectionRepository", "Iniciando solicitud de Collecciones desde la red...")
         val request = VolleyBroker.getRequest(
