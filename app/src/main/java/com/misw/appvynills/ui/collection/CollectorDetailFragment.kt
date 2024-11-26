@@ -1,15 +1,20 @@
-package com.misw.appvynills.ui.collector
+package com.misw.appvynills.ui.collection
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.misw.appvynills.databinding.FragmentCollectorDetailBinding
 import com.misw.appvynills.repository.CollectorRepository
+import com.misw.appvynills.ui.adapter.CollectorCommentsAdapter
+import com.misw.appvynills.ui.adapter.FavoritePerformersAdapter
+import com.misw.appvynills.ui.adapter.CollectorAlbumsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.util.Log
+import kotlinx.coroutines.withContext
 
 class CollectorDetailFragment : Fragment() {
 
@@ -22,23 +27,33 @@ class CollectorDetailFragment : Fragment() {
     ): View {
         _binding = FragmentCollectorDetailBinding.inflate(inflater, container, false)
 
-        // Obtén el ID del coleccionista de los argumentos del fragmento
+        // Obtener el ID del coleccionista desde los argumentos del fragmento
         val collectorId = arguments?.getInt("collectorId") ?: 0
 
-        // Llama al repositorio para obtener los detalles del coleccionista usando corrutinas
+        // Inicializar los RecyclerViews con LayoutManagers
+        binding.recyclerViewComments.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewPerformers.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(requireContext())
+
+        // Consumir datos desde el repositorio
         val repository = CollectorRepository(requireContext())
-        lifecycleScope.launch {
-            try {
-                val result = repository.getCollectorDetails(collectorId)
-                result.onSuccess { collector ->
-                    binding.collectorName.text = collector.name
-                    binding.collectorEmail.text = collector.email
-                    binding.collectorTelephone.text = collector.telephone
-                }.onFailure { error ->
-                    Log.e("CollectorDetailFragment", "Error al obtener detalles: ${error.message}")
-                }
-            } catch (e: Exception) {
-                Log.e("CollectorDetailFragment", "Excepción al obtener detalles: ${e.message}", e)
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                repository.getCollectorDetails(collectorId)
+            }
+            result.onSuccess { collector ->
+                // Mostrar datos principales
+                binding.collectorName.text = collector.name
+                binding.collectorEmail.text = collector.email
+                binding.collectorTelephone.text = collector.telephone
+
+                // Configurar adaptadores con datos
+                binding.recyclerViewComments.adapter = CollectorCommentsAdapter(collector.comments)
+                binding.recyclerViewPerformers.adapter = FavoritePerformersAdapter(collector.favoritePerformers)
+                binding.recyclerViewAlbums.adapter = CollectorAlbumsAdapter(collector.collectorAlbums)
+            }.onFailure { exception ->
+                // Manejar errores (puedes mostrar un mensaje al usuario)
+                exception.printStackTrace()
             }
         }
 

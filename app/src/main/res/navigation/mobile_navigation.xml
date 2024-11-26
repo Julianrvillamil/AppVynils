@@ -96,7 +96,7 @@
 
     <fragment
         android:id="@+id/collectorDetailFragment"
-        android:name="com.misw.appvynills.ui.collector.CollectorDetailFragment"
+        android:name="com.misw.appvynills.ui.collection.CollectorDetailFragment"
         android:label="Detalle del Coleccionista"
         tools:layout="@layout/fragment_collector_detail">
         <argument

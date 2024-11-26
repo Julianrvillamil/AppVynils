@@ -93,5 +93,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
 
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+
+
 
 }

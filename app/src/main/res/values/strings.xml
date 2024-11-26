@@ -19,4 +19,5 @@
     <string name="album_release_date">Fecha de Lanzamiento (YYYY-MM-DD)</string>
     <string name="album_name">Nombre album</string>
     <string name="cancel">Cancelar</string>
+    <string name="performer_image">Image of the performer</string>
 </resources>
