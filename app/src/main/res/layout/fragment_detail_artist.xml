@@ -50,6 +50,7 @@
                 app:layout_constraintTop_toBottomOf="@id/artistCover"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="Titulo del Artista"
                 tools:text="Artist Name" />
 
             <TextView

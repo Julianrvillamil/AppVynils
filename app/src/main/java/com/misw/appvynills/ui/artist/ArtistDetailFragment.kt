@@ -106,6 +106,10 @@ class ArtistDetailFragment : Fragment() {
                 }
             }
 
+            binding.artistCover.contentDescription = "Imagen del artista: ${artist.name}"
+
+            binding.artistTitle.contentDescription = "Nombre del artista: ${artist.name}"
+
             artistDescription.text = artist.description
 
             val albumsText = artist.albums?.let { albums ->

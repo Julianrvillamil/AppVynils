@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Imagen del artista:"/>
+            android:contentDescription="Imagen del artista"/>
 
         <TextView
             android:id="@+id/artistTitle"
@@ -34,7 +34,7 @@
             android:textSize="16sp"
             android:paddingTop="8dp"
             android:gravity="center"
-            android:contentDescription="Nombre del artista:"/>
+            android:contentDescription="Nombre del artista"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

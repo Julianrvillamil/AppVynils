@@ -80,6 +80,8 @@ class ArtistFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.loadingIndicator.visibility = View.GONE
+                        binding.noArtistsMessage.visibility = View.VISIBLE
+                        binding.noArtistsMessage.text = "No hay artistas disponibles"
                         showError(result.error.message)
                     }
                 }

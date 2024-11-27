@@ -40,12 +40,15 @@ class ArtistAdapter(private var artists: List<Artist>,
 
             try {
                 if (!artist.image.isNullOrEmpty()) {
+
                     Glide.with(itemView.context)
                         .load(artist.image)
+                        .placeholder(R.drawable.ic_launcher_background)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .dontAnimate()
                         .into(artistCover)
+
                 } else {
                     artistCover.visibility = View.GONE
                 }
@@ -53,11 +56,6 @@ class ArtistAdapter(private var artists: List<Artist>,
                 artistCover.visibility = View.GONE
             }
 
-            /*Picasso.get()
-                .load(artist.image) // 'album.coverUrl' con la propiedad que contenga la URL de la imagen
-                .placeholder(R.drawable.ic_launcher_background) // Imagen de marcador de posición mientras se carga
-                .error(R.drawable.ic_launcher_foreground) // Imagen que se mostrará si ocurre un error al cargar
-                .into(artistCover) // El ImageView donde se cargará la imagen */
 
             artistTitle.text = artist.name
 
