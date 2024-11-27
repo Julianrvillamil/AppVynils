@@ -61,6 +61,11 @@ class ArtistAdapter(private var artists: List<Artist>,
 
             artistTitle.text = artist.name
 
+            // Accesibilidad
+            itemView.contentDescription = "Artista: ${artist.name}"
+            artistCover.contentDescription = "Imagen del artista: ${artist.name}"
+            artistTitle.contentDescription = "Nombre del artista: ${artist.name}"
+
             // Configura el clic en la imagen para abrir ArtistDetailFragment
             artistCover.setOnClickListener {
                 Log.d("ArtistAdapter", "id: ${artist.id}")

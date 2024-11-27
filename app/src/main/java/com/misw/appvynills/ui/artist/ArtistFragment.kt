@@ -69,7 +69,10 @@ class ArtistFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.artistResult.collect { result ->
                 when (result) {
-                    is DataState.Loading -> binding.loadingIndicator.visibility = View.VISIBLE
+                    is DataState.Loading -> {
+                        binding.loadingIndicator.visibility = View.VISIBLE
+                        binding.loadingIndicator.announceForAccessibility("Cargando artistas")
+                    }
                     is DataState.Success -> {
                         binding.loadingIndicator.visibility = View.GONE
                         result.data?.let { artistAdapter.updateArtist(it) }
@@ -82,6 +85,7 @@ class ArtistFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private fun updateArtistList(artists: List<Artist>?) {

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.misw.appvynills.databinding.FragmentDetailAlbumBinding
 import com.squareup.picasso.Picasso
 import com.misw.appvynills.models.Album
@@ -84,14 +85,21 @@ class AlbumDetailFragment : Fragment(){
 
         // Observa el estado de carga
         viewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
-            Log.d("AlbumDetailFragment", "Cargando: $isLoading")
+            //Log.d("AlbumDetailFragment", "Cargando: $isLoading")
+            //binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                binding.loadingIndicator.announceForAccessibility("Cargando detalles del álbum")
+            }
         }
 
         // Observa los errores
         viewModel.error.observe(viewLifecycleOwner, Observer { error ->
-            error?.let {
+            /*error?.let {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }*/
+            if (!error.isNullOrEmpty()) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         })
     }
@@ -111,6 +119,14 @@ class AlbumDetailFragment : Fragment(){
         binding.commentsList.text = album.comments.joinToString(separator = "\n") { "${it.rating}⭐: ${it.description}" }
 
     }
+
+    private fun setupAccessibility(album: Album) {
+        binding.albumCover.contentDescription = "Portada del álbum: ${album.name}"
+        binding.albumName.contentDescription = "Título del álbum: ${album.name}"
+        binding.albumGenre.contentDescription = "Género del álbum: ${album.genre}"
+        binding.albumDescription.contentDescription = "Descripción del álbum: ${album.description}"
+    }
+
 
 
 

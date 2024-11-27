@@ -13,7 +13,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="Cargando detalles del álbum"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -33,6 +34,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:contentDescription="@string/album_cover"
                 android:scaleType="centerCrop"
+                android:focusable="true"
+                android:clickable="true"
                 tools:srcCompat="@drawable/ic_launcher_background" />
 
             <!-- Album Name -->
@@ -46,7 +49,8 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                tools:text="Album Name" />
+                tools:text="Album Name"
+                android:contentDescription="Título del álbum"/>
 
             <!-- Album Genre -->
             <TextView
@@ -57,7 +61,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="16sp"
-                tools:text="Genre: Rock" />
+                tools:text="Genre: Rock"
+                android:contentDescription="Género del álbum: [Dinamico]"/>
 
             <!-- Release Date -->
             <TextView
