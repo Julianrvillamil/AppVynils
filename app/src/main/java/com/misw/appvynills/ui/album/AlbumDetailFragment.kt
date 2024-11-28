@@ -16,6 +16,7 @@ import com.misw.appvynills.databinding.FragmentDetailAlbumBinding
 import com.squareup.picasso.Picasso
 import com.misw.appvynills.models.Album
 import com.misw.appvynills.repository.AlbumRepository
+import com.misw.appvynills.ui.track.AddTrackDialog
 import com.misw.appvynills.viewmodel.AlbumDetailViewModel
 import com.misw.appvynills.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
@@ -53,6 +54,11 @@ class AlbumDetailFragment : Fragment(){
             }
         } else {
             Toast.makeText(context, "Error: ID del álbum no encontrado mi Rey", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.buttonAddTrack.setOnClickListener {
+            val dialog = AddTrackDialog(albumId)
+            dialog.show(parentFragmentManager, "AddTrackDialog")
         }
 
         setupObservers()

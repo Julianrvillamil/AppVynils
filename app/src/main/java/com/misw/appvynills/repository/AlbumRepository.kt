@@ -254,6 +254,52 @@ class AlbumRepository(private val context: Context) {
         }
     }
 
+    suspend fun addTrackToAlbum(albumId: Int, trackData: JSONObject): Result<Boolean> = suspendCoroutine { cont ->
+
+        val request = VolleyBroker.postRequest(
+            "albums/$albumId/tracks",
+            trackData,
+            responseListener = { response ->
+                Log.i("AlbumRepository", "Respuesta del servidor al agregar track: $response")
+
+                // Si se recibe respuesta, marcar como éxito
+                cont.resume(Result.success(true))
+            },
+            errorListener = { error ->
+                Log.e("AlbumRepository", "Error al intentar crear el álbum: ${error.message}")
+                if (error.networkResponse != null) {
+                    val statusCode = error.networkResponse.statusCode
+                    val headers = error.networkResponse.headers
+                    val responseBody = String(error.networkResponse.data ?: ByteArray(0))
+
+                    Log.e("AlbumRepository", "Código de estado al agregar track:: $statusCode")
+                    Log.e("AlbumRepository", "Cabeceras del error al agregar track:: $headers")
+                    Log.e("AlbumRepository", "Cuerpo del error al agregar track:: $responseBody")
+                } else {
+                    Log.e("AlbumRepository", "Error sin respuesta de red al agregar track:: ${error.message}")
+                    Log.e("AlbumRepository", "Error sin respuesta de red al agregar track: ${error}")
+                }
+                // Si hay error, retornar como fallo
+                cont.resume(Result.failure(error))
+            }
+        )
+        /*withContext(Dispatchers.IO) {
+            try {
+                val path = "albums/$albumId/tracks"
+                val response = VolleyBroker.postRequest(
+                    path,
+                    trackData,
+                    ResponseListener = { response ->
+                        cont.resume(Result.success(true)) },
+                    //Response.ErrorListener { Result.failure(Exception(it.message)) }
+                )
+                VolleyBroker(context).instance.add(response)
+                Result.success(true)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }*/
+    }
 
     private fun parseAlbums(response: JSONArray): List<Album> {
         val albumList = mutableListOf<Album>()
