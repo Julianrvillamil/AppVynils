@@ -47,6 +47,7 @@ class AlbumDetailFragment : Fragment(){
         (activity as AppCompatActivity).supportActionBar?.title = "Detalle Album"
 
 
+
         // Verifica que el ID del álbum sea válido
         if (albumId != -1) {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -57,14 +58,22 @@ class AlbumDetailFragment : Fragment(){
         }
 
         binding.buttonAddTrack.setOnClickListener {
-            val dialog = AddTrackDialog(albumId)
-            dialog.show(parentFragmentManager, "AddTrackDialog")
+            val dialog = AddTrackDialog(albumId) {
+                Log.d("AlbumDetailFragment", "Recargando detalles del álbum tras agregar track")
+                viewModel.fetchAlbumDetails(albumId)
+                Log.d("AlbumDetailFragment", "Se recargo correctamente.................")
+
+            }
+            dialog.show(childFragmentManager, "AddTrackDialog")
         }
+
+
 
         setupObservers()
 
         return binding.root
     }
+
 
     private suspend fun fetchAlbumDetails(albumId: Int) {
         // Llama al repositorio para obtener la información detallada del álbum
@@ -83,6 +92,8 @@ class AlbumDetailFragment : Fragment(){
         // Observa los detalles del álbum
         viewModel.albumDetail.observe(viewLifecycleOwner, Observer { album ->
             if (album != null) {
+                Log.d("AlbumDetailFragment", "Detalles del álbum actualizados: ${album.tracks}")
+
                 displayAlbumDetails(album)
             } else {
                 Toast.makeText(context, "No se encontraron detalles del álbum", Toast.LENGTH_SHORT).show()
@@ -120,7 +131,15 @@ class AlbumDetailFragment : Fragment(){
         Picasso.get().load(album.cover).into(binding.albumCover)
 
         // Carga y muestra los comentarios, tracks, o performers adicionales si es necesario
-        binding.tracksList.text = album.tracks.joinToString(separator = "\n") { it.name }
+        val tracksText = album.tracks.joinToString(separator = "\n") { "${it.name} - Duración: ${it.duration}" }
+        binding.tracksList.text = tracksText
+        binding.tracksList.post {
+            binding.tracksList.text = tracksText
+            binding.tracksList.invalidate()
+            binding.tracksList.requestLayout()
+        }
+        Log.d("AlbumDetailFragment", "Pistas actualizadas en la vista: $tracksText")
+
         binding.performersList.text = album.performers.joinToString(separator = "\n") { it.name }
         binding.commentsList.text = album.comments.joinToString(separator = "\n") { "${it.rating}⭐: ${it.description}" }
 

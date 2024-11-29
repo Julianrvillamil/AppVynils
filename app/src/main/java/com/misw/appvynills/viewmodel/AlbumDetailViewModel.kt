@@ -23,19 +23,29 @@ class AlbumDetailViewModel (private val albumRepository: AlbumRepository) : View
     val error: LiveData<String?> get() = _error
 
     fun fetchAlbumDetails(albumId: Int) {
+        Log.d("AlbumDetailViewModel", "Obteniendo detalles del álbum para ID: $albumId")
+
         _isLoading.value = true
         viewModelScope.launch {
             try {
                 val album = withContext(Dispatchers.IO) {
+                    // Obtén los datos del servidor primero
+                    val updatedAlbum = albumRepository.getAlbumDetails(albumId)
+                    // Guarda los datos en la base de datos local
+                    if (updatedAlbum != null) {
+                        albumRepository.saveAlbumsToDatabase(listOf(updatedAlbum))
+                    }
+                    // Devuelve los datos más recientes desde la base de datos local
                     albumRepository.getAlbumDetails(albumId)
                 }
-                _albumDetail.value = album
+                _albumDetail.postValue(album)
+                _albumDetail.postValue(_albumDetail.value?.copy())
                 _error.value = null
             } catch (e: Exception) {
                 Log.e("AlbumDetailViewModel", "Error obteniendo detalles del álbum", e)
-                _error.value = e.message ?: "Error desconocido"
+                _error.postValue(e.message ?: "Error desconocido")
             } finally {
-                _isLoading.value = false
+                _isLoading.postValue(false)
             }
         }
     }

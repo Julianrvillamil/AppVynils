@@ -19,10 +19,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Matchers.not
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.matcher.BoundedMatcher
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
@@ -81,4 +86,41 @@ class AlbumDetailTest {
         }
     }
 
+    @get:Rule
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Test
+    fun testAddTrackToAlbum() {
+        // Navegar al detalle del álbum
+        onView(withId(R.id.recyclerViewAlbums))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        // Verifica que el detalle del álbum se cargó
+        onView(withId(R.id.albumName))
+            .check(matches(isDisplayed()))
+
+        // Espera a que el botón de agregar track esté visible
+        onView(withId(R.id.buttonAddTrack))
+            .perform(scrollTo(), click())
+
+        // Verifica que el formulario de agregar pista esté visible
+        onView(withId(R.id.inputTrackName))
+            .check(matches(isDisplayed()))
+
+        // Rellena el formulario
+        onView(withId(R.id.inputTrackName))
+            .perform(typeText("Nueva Pista"), closeSoftKeyboard())
+        onView(withId(R.id.inputTrackDuration))
+            .perform(typeText("5:15"), closeSoftKeyboard())
+
+        // Confirma la adición de la pista
+        onView(withId(R.id.buttonAddTrack))
+            .perform(click())
+
+        // Verifica que la nueva pista aparezca en la lista
+        onView(withId(R.id.tracksList))
+            .check(matches(withText(containsString("Nueva Pista - Duración: 5:15"))))
+
+
+    }
 }

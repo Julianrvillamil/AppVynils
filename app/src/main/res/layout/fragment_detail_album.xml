@@ -32,20 +32,6 @@
             tools:context=".ui.album.AlbumDetailFragment"
             android:padding="16dp">
 
-            <Button
-                android:id="@+id/buttonAddTrack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/commentsList"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Agregar Track"
-                android:backgroundTint="@color/purple_700"
-                android:textColor="@android:color/white"
-                android:layout_marginBottom="16dp"
-                android:contentDescription="Botón para agregar una pista al álbum"/>
-
 
             <!-- Album Cover Image -->
             <ImageView
@@ -121,6 +107,22 @@
                 android:layout_marginTop="8dp"
                 tools:text="Album Description goes here. This is a brief description of the album content." />
 
+
+            <Button
+                android:id="@+id/buttonAddTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/commentsList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Agregar Track"
+                android:backgroundTint="@color/purple_700"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Botón para agregar una pista al álbum"/>
+
+
             <!-- Tracks Section -->
             <TextView
                 android:id="@+id/tracksLabel"
@@ -135,12 +137,14 @@
 
             <TextView
                 android:id="@+id/tracksList"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tracksLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:scrollbars="vertical"
                 android:textSize="16sp"
+                android:padding="8dp"
                 tools:text="1. Track Name - 3:45\n2. Another Track - 4:12" />
 
             <!-- Performers Section -->
