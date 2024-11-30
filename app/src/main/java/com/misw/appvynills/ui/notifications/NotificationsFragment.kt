@@ -14,6 +14,7 @@ import com.misw.appvynills.databinding.FragmentNotificationsBinding
 import com.misw.appvynills.repository.CollectorRepository
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
+import androidx.navigation.fragment.findNavController
 import java.util.stream.Collectors
 
 
@@ -33,16 +34,21 @@ class NotificationsFragment : Fragment() {
 
         // Llama al repositorio para obtener los coleccionistas
         val repository = CollectorRepository(requireContext())
-        //llama repo a travesde coroutine
         viewLifecycleOwner.lifecycleScope.launch {
             val result = repository.getCollectors()
             result.onSuccess { collectors ->
-                recyclerView.adapter = CollectorAdapter(collectors)
+                // Pasa la función lambda que maneja la navegación al adaptador
+                recyclerView.adapter = CollectorAdapter(collectors) { collectorId ->
+                    val action =
+                        NotificationsFragmentDirections.actionNotificationsFragmentToCollectorDetailFragment(
+                            collectorId
+                        )
+                    findNavController().navigate(action)
+                }
             }.onFailure { exception ->
                 exception.printStackTrace()
             }
         }
-
 
         return binding.root
     }
