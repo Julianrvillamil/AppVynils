@@ -2,18 +2,27 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:paddingTop="0dp"
+    >
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="0dp"
+        android:paddingBottom="60dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ProgressBar
             android:id="@+id/loadingIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="Cargando detalles del álbum"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,6 +31,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             tools:context=".ui.album.AlbumDetailFragment"
             android:padding="16dp">
+
 
             <!-- Album Cover Image -->
             <ImageView
@@ -33,6 +43,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:contentDescription="@string/album_cover"
                 android:scaleType="centerCrop"
+                android:focusable="true"
+                android:clickable="true"
                 tools:srcCompat="@drawable/ic_launcher_background" />
 
             <!-- Album Name -->
@@ -46,7 +58,8 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                tools:text="Album Name" />
+                tools:text="Album Name"
+                android:contentDescription="Título del álbum"/>
 
             <!-- Album Genre -->
             <TextView
@@ -57,7 +70,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="16sp"
-                tools:text="Genre: Rock" />
+                tools:text="Genre: Rock"
+                android:contentDescription="Género del álbum: [Dinamico]"/>
 
             <!-- Release Date -->
             <TextView
@@ -93,6 +107,22 @@
                 android:layout_marginTop="8dp"
                 tools:text="Album Description goes here. This is a brief description of the album content." />
 
+
+            <Button
+                android:id="@+id/buttonAddTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/commentsList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Agregar Track"
+                android:backgroundTint="@color/purple_700"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Botón para agregar una pista al álbum"/>
+
+
             <!-- Tracks Section -->
             <TextView
                 android:id="@+id/tracksLabel"
@@ -107,12 +137,14 @@
 
             <TextView
                 android:id="@+id/tracksList"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tracksLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:scrollbars="vertical"
                 android:textSize="16sp"
+                android:padding="8dp"
                 tools:text="1. Track Name - 3:45\n2. Another Track - 4:12" />
 
             <!-- Performers Section -->
@@ -156,13 +188,14 @@
                 app:layout_constraintTop_toBottomOf="@id/commentsLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:scrollbars="vertical"
                 android:textSize="16sp"
                 tools:text="User1: Great album! ⭐⭐⭐⭐\nUser2: Love this music. ⭐⭐⭐⭐⭐" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+    </LinearLayout>
 
 
 </ScrollView>

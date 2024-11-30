@@ -35,15 +35,21 @@ class AlbumAdapter(
                         .skipMemoryCache(false)
                         .dontAnimate()
                         .into(albumCover)
+                    albumCover.contentDescription = "Imagen del álbum: ${album.name}"
                 } else {
                     albumCover.visibility = View.GONE
+                    albumCover.contentDescription = "No hay imagen disponible para el álbum: ${album.name}"
                 }
             } catch (e: Exception) {
                 albumCover.visibility = View.GONE
+                albumCover.contentDescription = "Error al cargar la imagen del álbum: ${album.name}"
             }
 
             albumTitle.text = album.name
+            albumTitle.contentDescription = "Título del álbum: ${album.name}"
+
             albumGenre.text = album.genre
+            albumGenre.contentDescription = "Género: ${album.genre}"
 
             // Configura el clic en la imagen
             itemView.setOnClickListener {

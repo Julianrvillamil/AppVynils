@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.artist.ArtistFragment">
 
+    <TextView
+        android:id="@+id/noArtistsMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="No hay artistas disponibles"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="Mensaje de lista vacía"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewArtists"
         android:layout_width="0dp"
@@ -23,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:contentDescription="Cargando artistas"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

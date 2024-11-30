@@ -91,17 +91,22 @@ class AlbumFragment : Fragment() {
             Log.d("AlbumFragment", "Cargando: $isLoading")
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
            // binding.recyclerViewAlbums.visibility = if (isLoading) View.GONE else View.VISIBLE
-
+            if (isLoading) {
+                binding.emptyListMessage.visibility = View.GONE
+                binding.recyclerViewAlbums.visibility = View.GONE
+            }
         }
-
-
 
         albumViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
             if (!albums.isNullOrEmpty()) {
                 Log.d("AlbumFragment", "Álbumes cargados: ${albums.size}")
                 albumAdapter.updateAlbums(albums)
-            } else {
+                binding.emptyListMessage.visibility = View.GONE
+                binding.recyclerViewAlbums.visibility = View.VISIBLE
+            } else if (!albumViewModel.isLoading.value!!) {
                 Log.d("AlbumFragment", "La lista de álbumes está vacía")
+                binding.emptyListMessage.visibility = View.VISIBLE
+                binding.recyclerViewAlbums.visibility = View.GONE
             }
         }
 
