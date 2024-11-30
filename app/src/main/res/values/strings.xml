@@ -20,4 +20,7 @@
     <string name="album_name">Nombre album</string>
     <string name="cancel">Cancelar</string>
     <string name="performer_image">Image of the performer</string>
+    <string name="addTrackDescription">Botón para agregar una pista al álbum</string>
+    <string name="labelAddTrack">Agrega nueva Pista</string>
+    <string name="inputTrackName">Nombre de la Pista</string>
 </resources>

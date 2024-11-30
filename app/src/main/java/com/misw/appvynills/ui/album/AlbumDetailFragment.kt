@@ -79,6 +79,7 @@ class AlbumDetailFragment : Fragment(){
         // Llama al repositorio para obtener la información detallada del álbum
         try {
             val albumDetails = AlbumRepository(requireContext()).getAlbumDetails(albumId)
+            Log.d("AlbumDetailFragment", "fetchAlbumDetails:::: llama a repo para obtener data actualizada albumDetails -> ${albumDetails}")
             if (albumDetails != null) {
                 displayAlbumDetails(albumDetails)
             }
@@ -123,6 +124,7 @@ class AlbumDetailFragment : Fragment(){
 
     private fun displayAlbumDetails(album: Album) {
 
+        Log.d("AlbumDetailFragment", "displayAlbumDetails:::: ENTRAN EN DISPLAY PARA ACTUALIZAR LA DATA EN FRAGMENT")
         binding.albumName.text = album.name
         binding.albumGenre.text = album.genre
         binding.albumReleaseDate.text = album.releaseDate

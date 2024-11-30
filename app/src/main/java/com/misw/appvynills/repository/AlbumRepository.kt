@@ -218,7 +218,7 @@ class AlbumRepository(private val context: Context) {
             responseListener = { response ->
                 Log.i("AlbumRepository", "Respuesta del servidor al agregar track: $response")
                 // Si se recibe respuesta, marcar como éxito
-                cont.resume(Result.success(true))
+                //cont.resume(Result.success(true))
                 // Lanza una corrutina para sincronizar los datos
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -226,27 +226,19 @@ class AlbumRepository(private val context: Context) {
                         val updatedAlbum = getAlbumDetailsFromNetwork(albumId)
                         if (updatedAlbum != null) {
                             saveAlbumsToDatabase(listOf(updatedAlbum))
+                            cont.resume(Result.success(true)) // Notifica éxito después de sincronizar
                             Log.i("AlbumRepository", "Sincronización exitosa de álbum con ID: $albumId")
+                        }else {
+                            cont.resume(Result.failure(Exception("Sin datos actualizados del servidor")))
                         }
                     } catch (e: Exception) {
                         Log.e("AlbumRepository", "Error al sincronizar el álbum después de agregar el track", e)
+                        cont.resumeWithException(e)
                     }
                 }
             },
             errorListener = { error ->
                 Log.e("AlbumRepository", "Error al intentar crear el álbum: ${error.message}")
-                error.networkResponse?.let { networkResponse ->
-                    val statusCode = networkResponse.statusCode
-                    val headers = networkResponse.headers
-                    val responseBody = String(networkResponse.data ?: ByteArray(0))
-
-                    Log.e("AlbumRepository", "Código de estado al agregar track:: $statusCode")
-                    Log.e("AlbumRepository", "Cabeceras del error al agregar track:: $headers")
-                    Log.e("AlbumRepository", "Cuerpo del error al agregar track:: $responseBody")
-
-                }
-
-                // Si hay error, retornar como fallo
                 cont.resume(Result.failure(error))
             }
         )

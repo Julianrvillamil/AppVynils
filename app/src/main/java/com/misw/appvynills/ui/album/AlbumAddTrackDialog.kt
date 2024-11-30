@@ -96,7 +96,6 @@ class AddTrackDialog(
                     Toast.makeText(requireContext(), "Track agregado exitosamente", Toast.LENGTH_SHORT).show()
                     Log.d("AddTrackDialog", "Ejecutando callback para recargar pistas")
                     onTrackAdded()
-                    delay(4000)
                     dismiss()
                 } else {
                     Toast.makeText(requireContext(), "Error al agregar Pista!", Toast.LENGTH_SHORT).show()
