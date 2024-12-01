@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.misw.appvynills.R
 import com.misw.appvynills.databinding.FragmentAlbumBinding
 import com.misw.appvynills.repository.AlbumRepository
 import com.misw.appvynills.ui.adapter.AlbumAdapter
@@ -41,6 +43,15 @@ class AlbumFragment : Fragment() {
         //binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
         val root: View = binding.root
 
+        binding.fabCreateAlbum.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.action_homeFragment_to_createAlbumFragment)
+            } catch (e: Exception) {
+                Log.e("AlbumFragment", "Error en la navegación", e)
+                showError("Error al navegar al fragmento de creación")
+            }
+        }
+
 
         // Observa los datos del ViewModel y actualiza el adapter cuando estén disponibles
 
@@ -67,9 +78,10 @@ class AlbumFragment : Fragment() {
         }
         binding.recyclerViewAlbums.apply {
             adapter = albumAdapter
-            layoutManager = LinearLayoutManager(context)
-            //setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true) // permite optimizar cuando los items tienen tamaño fijo
         }
+
 
     }
 
@@ -79,15 +91,22 @@ class AlbumFragment : Fragment() {
             Log.d("AlbumFragment", "Cargando: $isLoading")
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
            // binding.recyclerViewAlbums.visibility = if (isLoading) View.GONE else View.VISIBLE
-
+            if (isLoading) {
+                binding.emptyListMessage.visibility = View.GONE
+                binding.recyclerViewAlbums.visibility = View.GONE
+            }
         }
 
         albumViewModel.albumsLiveData.observe(viewLifecycleOwner) { albums ->
             if (!albums.isNullOrEmpty()) {
                 Log.d("AlbumFragment", "Álbumes cargados: ${albums.size}")
                 albumAdapter.updateAlbums(albums)
-            } else {
+                binding.emptyListMessage.visibility = View.GONE
+                binding.recyclerViewAlbums.visibility = View.VISIBLE
+            } else if (!albumViewModel.isLoading.value!!) {
                 Log.d("AlbumFragment", "La lista de álbumes está vacía")
+                binding.emptyListMessage.visibility = View.VISIBLE
+                binding.recyclerViewAlbums.visibility = View.GONE
             }
         }
 

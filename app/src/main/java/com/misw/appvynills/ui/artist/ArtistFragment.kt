@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.misw.appvynills.brokers.NetworkModule
 import com.misw.appvynills.database.VinylRoomDatabase
@@ -52,7 +53,7 @@ class ArtistFragment : Fragment() {
         }
         binding.recyclerViewArtists.apply {
             adapter = artistAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
         }
 
         Log.d("ArtistFragment", "En Oncreate")
@@ -68,7 +69,10 @@ class ArtistFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.artistResult.collect { result ->
                 when (result) {
-                    is DataState.Loading -> binding.loadingIndicator.visibility = View.VISIBLE
+                    is DataState.Loading -> {
+                        binding.loadingIndicator.visibility = View.VISIBLE
+                        binding.loadingIndicator.announceForAccessibility("Cargando artistas")
+                    }
                     is DataState.Success -> {
                         binding.loadingIndicator.visibility = View.GONE
                         result.data?.let { artistAdapter.updateArtist(it) }
@@ -76,11 +80,14 @@ class ArtistFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.loadingIndicator.visibility = View.GONE
+                        binding.noArtistsMessage.visibility = View.VISIBLE
+                        binding.noArtistsMessage.text = "No hay artistas disponibles"
                         showError(result.error.message)
                     }
                 }
             }
         }
+
     }
 
     private fun updateArtistList(artists: List<Artist>?) {

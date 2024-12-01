@@ -6,9 +6,21 @@
     <string name="album_comments">Comentarios</string>
     <string name="title_dashboard">Artistas</string>
     <string name="title_notifications">Coleccionistas</string>
-    <string name="album_cover">imageee</string>
+    <string name="album_cover">Portada del álbum</string>
     <string name="splash_welcome">Vinilos App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="birth_date">Fecha de nacimiento</string>
+    <string name="create_album">crear nuevo album</string>
+    <string name="album_genre">Genero</string>
+    <string name="album_description">Descripción</string>
+    <string name="submit">Crear</string>
+    <string name="album_record_label">Record</string>
+    <string name="album_release_date">Fecha de Lanzamiento (YYYY-MM-DD)</string>
+    <string name="album_name">Nombre album</string>
+    <string name="cancel">Cancelar</string>
+    <string name="performer_image">Image of the performer</string>
+    <string name="addTrackDescription">Botón para agregar una pista al álbum</string>
+    <string name="labelAddTrack">Agrega nueva Pista</string>
+    <string name="inputTrackName">Nombre de la Pista</string>
 </resources>

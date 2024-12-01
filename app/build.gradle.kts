@@ -71,8 +71,19 @@ dependencies {
     implementation(libs.retrofit2.retrofit)
     implementation(libs.retrofit2.converter)
 
-    // Mockito core para pruebas unitarias
+    // Pruebas unitarias y de integración
+    testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    // Pruebas instrumentadas
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+
+
+
 
     // Mockito-Kotlin (opcional, para mejorar la integración con Kotlin)
     testImplementation(libs.mockito.kotlin)
@@ -92,6 +103,10 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
+
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+
 
 
 }

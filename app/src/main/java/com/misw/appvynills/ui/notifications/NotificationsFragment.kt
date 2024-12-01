@@ -9,9 +9,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.misw.appvynills.databinding.FragmentNotificationsBinding
 import com.misw.appvynills.repository.CollectorRepository
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
+import androidx.navigation.fragment.findNavController
+import java.util.stream.Collectors
 
 
 class NotificationsFragment : Fragment() {
@@ -30,9 +34,19 @@ class NotificationsFragment : Fragment() {
 
         // Llama al repositorio para obtener los coleccionistas
         val repository = CollectorRepository(requireContext())
-        repository.getCollectors { collectors ->
-            collectors?.let {
-                recyclerView.adapter = CollectorAdapter(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val result = repository.getCollectors()
+            result.onSuccess { collectors ->
+                // Pasa la función lambda que maneja la navegación al adaptador
+                recyclerView.adapter = CollectorAdapter(collectors) { collectorId ->
+                    val action =
+                        NotificationsFragmentDirections.actionNotificationsFragmentToCollectorDetailFragment(
+                            collectorId
+                        )
+                    findNavController().navigate(action)
+                }
+            }.onFailure { exception ->
+                exception.printStackTrace()
             }
         }
 
