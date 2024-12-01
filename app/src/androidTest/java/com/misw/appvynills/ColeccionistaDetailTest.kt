@@ -25,7 +25,7 @@ class ColeccionistaDetailTest {
     var mActivityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun listColeccionistasTest() {
+    fun detailColeccionistaTest() {
         // Esperar a que la actividad se inicialice
         SystemClock.sleep(3000)
 

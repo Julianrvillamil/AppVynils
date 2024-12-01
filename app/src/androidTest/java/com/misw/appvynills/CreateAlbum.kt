@@ -34,6 +34,9 @@ class CreateAlbum {
 
     @Test
     fun createAlbum() {
+        // Agregamos una espera para que el splash termine
+        Thread.sleep(3000)
+
         val floatingActionButton = onView(
             allOf(
                 withId(R.id.fabCreateAlbum), withContentDescription("crear nuevo album"),
